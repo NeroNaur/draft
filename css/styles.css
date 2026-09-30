@@ -200,10 +200,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero h1 { font-family: var(--font-heading); font-weight: 600; font-size: 48px; line-height: 56px; color: var(--white); }
 .hero__lead { font-size: 20px; line-height: 30px; color: var(--blush); }
 .hero .search-bar { max-width: 795px; }
+/* College and Department get the wide top row so long names (e.g. "School of Nursing and Allied
+   Medical Sciences") show in full; Year and Document type share the row below. */
 .hero-filters {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px;
-  width: 100%; max-width: 814px; text-align: left;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 20px;
+  width: 100%; max-width: 900px; text-align: left;
 }
+.hero-filters select { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero-filters select.has-value { color: var(--accent-black); }
 
 .agenda { position: relative; color: var(--white); }
 .agenda__shape { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }
@@ -248,15 +252,19 @@ ul { margin: 0; padding: 0; list-style: none; }
 .field-label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; }
 .year-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-.check { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 16px; line-height: 22px; }
+.check-list { display: flex; flex-direction: column; gap: 12px; }
+.check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 16px; line-height: 22px; }
 .check input {
   appearance: none; -webkit-appearance: none; margin: 0; flex-shrink: 0;
   width: 22px; height: 22px; border: 1.5px solid var(--border-strong); border-radius: 4px; background: var(--white);
   display: grid; place-items: center; cursor: pointer;
 }
 .check input:checked { background: var(--primary) url("../assets/icon-check.svg") center / 16px 16px no-repeat; border-color: var(--primary); }
-.check__label { flex: 1 1 auto; }
-.check__count { font-size: 14px; line-height: 21px; color: var(--text-muted); }
+.check__label { flex: 1 1 auto; min-width: 0; }
+.check__count { flex: none; min-width: 20px; text-align: right; font-size: 14px; line-height: 22px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.filter-more { align-self: flex-start; }
+.year-row .select select { padding-right: 36px; color: var(--accent-black); }
+.year-row .select::after { right: 12px; }
 
 .results-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
 .results-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -281,6 +289,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .page-num:hover { border-color: var(--secondary); }
 .page-num[aria-current="page"] { background: var(--primary); border-color: var(--primary); color: var(--white); }
+.page-gap { width: 24px; text-align: center; color: var(--text-muted); }
+.pagination[hidden], .chips[hidden] { display: none; }
+.results-list { display: flex; flex-direction: column; gap: 20px; }
+.results-range { white-space: nowrap; }
+.results-empty { padding: 32px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.results-empty h2 { font-family: var(--font-heading); font-weight: 500; font-size: 24px; line-height: 30px; }
+.results-empty p { color: var(--text-muted); }
+.doc-card mark { background: var(--accent-yellow); color: inherit; border-radius: 2px; padding-inline: 1px; }
 
 /* ---------- 06 · Document Detail ---------- */
 .detail-page { display: flex; flex-direction: column; gap: 28px; padding-block: 48px; }
@@ -409,7 +425,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   .main-nav { order: 3; width: 100%; overflow-x: auto; gap: 24px; padding-bottom: 2px; }
   .hero h1 { font-size: 36px; line-height: 44px; }
   .hero__lead { font-size: 17px; line-height: 26px; }
-  .hero-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .hero-filters { gap: 12px; }
   .hero .btn { padding-inline: 28px; }
   .doc-info__row { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   .page-title { font-size: 28px; line-height: 36px; }

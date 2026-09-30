@@ -7,12 +7,15 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/accounts.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/colleges.js"></script>
   <script>ARCH.guard(["instructor"]);</script>
   <script src="js/icons.js"></script>
   <script src="js/submissions.js"></script>
   <script src="js/filestore.js"></script>
   <script src="js/pdfviewer.js"></script>
   <script src="js/header.js"></script>
+  <script src="js/documents.js"></script>
+  <script src="js/search.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -57,34 +60,16 @@
           </div>
           <div class="hero-filters">
             <label class="select select--pill"><span class="visually-hidden">College</span>
-              <select name="college">
-                <option value="">All colleges</option>
-                <option>College of Allied Health Studies</option>
-                <option>College of Business and Accountancy</option>
-                <option>College of Computing Studies</option>
-                <option>College of Education</option>
-                <option>College of Engineering and Architecture</option>
-              </select>
+              <select name="college"><option value="">All colleges</option></select>
             </label>
             <label class="select select--pill"><span class="visually-hidden">Department</span>
-              <select name="department">
-                <option value="">All departments</option>
-                <option>Information Technology</option>
-                <option>Computer Science</option>
-                <option>Nursing</option>
-              </select>
+              <select name="department"><option value="">All departments</option></select>
             </label>
             <label class="select select--pill"><span class="visually-hidden">Year</span>
-              <select name="year">
-                <option value="">Any year</option>
-                <option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option>
-              </select>
+              <select name="year"><option value="">Any year</option></select>
             </label>
             <label class="select select--pill"><span class="visually-hidden">Document type</span>
-              <select name="type">
-                <option value="">All document types</option>
-                <option>Thesis</option><option>Capstone Project</option><option>Dissertation</option><option>Faculty Research</option>
-              </select>
+              <select name="type"><option value="">All document types</option></select>
             </label>
           </div>
         </form>
@@ -110,44 +95,22 @@
         <ul class="type-tiles">
           <li><a class="card type-tile" href="results.html?type=Thesis">
             <span class="icon-circle"><img src="assets/icon-cap.svg" width="28" height="28" alt=""></span>
-            <span class="type-tile__name">Theses</span><span class="type-tile__count">412 documents</span></a></li>
+            <span class="type-tile__name">Theses</span><span class="type-tile__count" data-type-count="Thesis"></span></a></li>
           <li><a class="card type-tile" href="results.html?type=Capstone%20Project">
             <span class="icon-circle"><img src="assets/icon-layers.svg" width="28" height="28" alt=""></span>
-            <span class="type-tile__name">Capstone Projects</span><span class="type-tile__count">538 documents</span></a></li>
+            <span class="type-tile__name">Capstone Projects</span><span class="type-tile__count" data-type-count="Capstone Project"></span></a></li>
           <li><a class="card type-tile" href="results.html?type=Dissertation">
             <span class="icon-circle"><img src="assets/icon-book.svg" width="28" height="28" alt=""></span>
-            <span class="type-tile__name">Dissertations</span><span class="type-tile__count">46 documents</span></a></li>
+            <span class="type-tile__name">Dissertations</span><span class="type-tile__count" data-type-count="Dissertation"></span></a></li>
           <li><a class="card type-tile" href="results.html?type=Faculty%20Research">
             <span class="icon-circle"><img src="assets/icon-flask.svg" width="28" height="28" alt=""></span>
-            <span class="type-tile__name">Faculty Research</span><span class="type-tile__count">252 documents</span></a></li>
+            <span class="type-tile__name">Faculty Research</span><span class="type-tile__count" data-type-count="Faculty Research"></span></a></li>
         </ul>
       </section>
 
       <section class="home-block" aria-labelledby="new-title">
         <h2 class="section-title" id="new-title">New Studies</h2>
-        <div class="recent-row">
-          <article class="card doc-card">
-            <div class="meta"><span class="tag">Capstone Project</span><span>2025</span></div>
-            <h3 class="doc-card__title"><a href="detail.html?doc=enroll">Design and Implementation of a Web-Based Enrollment Analytics Dashboard for Higher Education Institutions</a></h3>
-            <p class="doc-card__authors">Dela Cruz, Juan P.; Santos, Maria L.</p>
-            <p class="doc-card__college">College of Computing Studies</p>
-            <a class="link-arrow" href="detail.html?doc=enroll">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
-          </article>
-          <article class="card doc-card">
-            <div class="meta"><span class="tag">Thesis</span><span>2024</span></div>
-            <h3 class="doc-card__title"><a href="detail.html?doc=nursing">Effects of Simulation-Based Learning on the Clinical Competence of Nursing Students</a></h3>
-            <p class="doc-card__authors">Garcia, Angelica R.</p>
-            <p class="doc-card__college">College of Allied Health Studies</p>
-            <a class="link-arrow" href="detail.html?doc=nursing">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
-          </article>
-          <article class="card doc-card">
-            <div class="meta"><span class="tag">Thesis</span><span>2024</span></div>
-            <h3 class="doc-card__title"><a href="detail.html?doc=seismic">Seismic Performance of Low-Rise Reinforced Concrete Buildings in Central Luzon</a></h3>
-            <p class="doc-card__authors">Mendoza, Rafael T.; Villanueva, Carla S.</p>
-            <p class="doc-card__college">College of Engineering and Architecture</p>
-            <a class="link-arrow" href="detail.html?doc=seismic">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
-          </article>
-        </div>
+        <div class="recent-row" data-new-studies></div>
       </section>
     </div>
   </main>
@@ -158,5 +121,6 @@
       <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
     </div>
   </footer>
+  <script>ARCH_SEARCH.initCatalog();</script>
 </body>
 </html>

@@ -10,6 +10,9 @@
   <script>ARCH.guard(["general", "faculty", "instructor", "uro"]);</script>
   <script src="js/view-requests.js"></script>
   <script src="js/header.js"></script>
+  <script src="js/colleges.js"></script>
+  <script src="js/documents.js"></script>
+  <script src="js/search.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -38,10 +41,10 @@
 
   <main>
     <div class="container results-page">
-      <form class="search-bar search-bar--outlined" action="results.html" method="get" role="search">
+      <form class="search-bar search-bar--outlined" id="search-form" action="results.html" method="get" role="search">
         <img src="assets/icon-search.svg" width="24" height="24" alt="">
         <label class="visually-hidden" for="q">Search the repository</label>
-        <input id="q" type="search" name="q" value="research" placeholder="Search by title, author, or keyword">
+        <input id="q" type="search" name="q" placeholder="Search by title, author, or keyword" autocomplete="off">
         <button class="btn btn--gold" type="submit" style="padding-inline:48px">Search</button>
       </form>
 
@@ -58,41 +61,35 @@
 
           <div class="filter-group" role="group" aria-labelledby="fg1">
             <p class="filter-group__label" id="fg1">Document type</p>
-            <label class="check"><input type="checkbox" name="type" value="Thesis" checked><span class="check__label">Thesis</span><span class="check__count">14</span></label>
-            <label class="check"><input type="checkbox" name="type" value="Capstone Project"><span class="check__label">Capstone Project</span><span class="check__count">6</span></label>
-            <label class="check"><input type="checkbox" name="type" value="Dissertation"><span class="check__label">Dissertation</span><span class="check__count">2</span></label>
-            <label class="check"><input type="checkbox" name="type" value="Faculty Research"><span class="check__label">Faculty Research</span><span class="check__count">2</span></label>
+            <div id="type-list" class="check-list"></div>
           </div>
 
           <div class="filter-group" role="group" aria-labelledby="fg2">
             <p class="filter-group__label" id="fg2">College</p>
-            <label class="check"><input type="checkbox" name="college" value="Allied Health Studies" checked><span class="check__label">Allied Health Studies</span><span class="check__count">9</span></label>
-            <label class="check"><input type="checkbox" name="college" value="Computing Studies"><span class="check__label">Computing Studies</span><span class="check__count">5</span></label>
-            <label class="check"><input type="checkbox" name="college" value="Engineering and Architecture"><span class="check__label">Engineering and Architecture</span><span class="check__count">4</span></label>
-            <label class="check"><input type="checkbox" name="college" value="Business and Accountancy"><span class="check__label">Business and Accountancy</span><span class="check__count">3</span></label>
-            <label class="check"><input type="checkbox" name="college" value="Education"><span class="check__label">Education</span><span class="check__count">3</span></label>
+            <div id="college-list" class="check-list"></div>
+            <button class="text-link filter-more" type="button" id="college-more" aria-expanded="false" aria-controls="college-list"></button>
           </div>
 
           <div class="filter-group">
             <label class="filter-group__label" for="dept">Department</label>
-            <span class="select"><select id="dept"><option>All departments</option><option>Information Technology</option><option>Computer Science</option><option>Nursing</option></select></span>
+            <span class="select"><select id="dept"></select></span>
           </div>
 
           <div class="filter-group" role="group" aria-labelledby="fg3">
             <p class="filter-group__label" id="fg3">Year</p>
             <div class="year-row">
               <label class="field-label">From
-                <span class="select"><select><option>2015</option><option>2016</option><option>2017</option><option>2018</option><option>2019</option><option>2020</option></select></span>
+                <span class="select"><select id="year-from"></select></span>
               </label>
               <label class="field-label">To
-                <span class="select"><select><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select></span>
+                <span class="select"><select id="year-to"></select></span>
               </label>
             </div>
           </div>
 
           <div class="filter-group">
             <label class="filter-group__label" for="author">Author</label>
-            <input class="input" id="author" type="text" placeholder="Author’s name">
+            <input class="input" id="author" type="text" placeholder="Author’s name" autocomplete="off">
           </div>
         </aside>
 
@@ -100,52 +97,20 @@
         <section class="results-col" aria-labelledby="results-count">
           <div class="results-head">
             <div>
-              <h1 class="results-count" id="results-count">24 results</h1>
-              <p class="results-query">for “research”</p>
+              <h1 class="results-count" id="results-count" aria-live="polite"></h1>
+              <p class="results-query" id="results-query"></p>
             </div>
             <label class="sort">Sort by
-              <span class="select select--sm"><select><option>Newest first</option><option>Oldest first</option><option>Title A–Z</option><option>Most relevant</option></select></span>
+              <span class="select select--sm"><select id="sort">
+                <option value="relevant">Most relevant</option><option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option><option value="title">Title A–Z</option>
+              </select></span>
             </label>
           </div>
 
-          <div class="chips" aria-label="Active filters">
-            <button class="chip" type="button" data-filter="Thesis">Thesis <img src="assets/icon-x-chip.svg" width="14" height="14" alt="Remove"></button>
-            <button class="chip" type="button" data-filter="Allied Health Studies">Allied Health Studies <img src="assets/icon-x-chip.svg" width="14" height="14" alt="Remove"></button>
-          </div>
-
-          <article class="doc-card card doc-card--gold">
-            <div class="meta"><span class="tag">Capstone Project</span><span>2025</span></div>
-            <h2 class="doc-card__title"><a href="detail.html?doc=enroll">Design and Implementation of a Web-Based Enrollment Analytics Dashboard for Higher Education Institutions</a></h2>
-            <p class="doc-card__authors">Dela Cruz, Juan P.; Santos, Maria L.</p>
-            <p class="doc-card__college">College of Computing Studies</p>
-            <p class="doc-card__summary">This capstone project develops a dashboard that helps registrars monitor enrollment trends and forecast section demand.</p>
-            <a class="link-arrow" href="detail.html?doc=enroll">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
-          </article>
-          <article class="doc-card card doc-card--gold">
-            <div class="meta"><span class="tag">Faculty Research</span><span>2023</span></div>
-            <h2 class="doc-card__title"><a href="detail.html?doc=finlit">Financial Literacy and Small Enterprise Sustainability in Pampanga</a></h2>
-            <p class="doc-card__authors">Bautista, Erlinda M.</p>
-            <p class="doc-card__college">College of Business and Accountancy</p>
-            <p class="doc-card__summary">This study examines how financial literacy relates to the long-term survival of micro and small enterprises.</p>
-            <a class="link-arrow" href="detail.html?doc=finlit">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
-          </article>
-          <article class="doc-card card doc-card--gold">
-            <div class="meta"><span class="tag">Dissertation</span><span>2022</span></div>
-            <h2 class="doc-card__title"><a href="detail.html?doc=teacher">Teacher Digital Competence and Student Engagement in Blended Classrooms</a></h2>
-            <p class="doc-card__authors">Tolentino, Grace A.</p>
-            <p class="doc-card__college">College of Education</p>
-            <p class="doc-card__summary">A mixed-methods dissertation on how teacher digital skills shape student engagement in blended learning.</p>
-            <a class="link-arrow" href="detail.html?doc=teacher">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
-          </article>
-
-          <nav class="pagination" aria-label="Results pages">
-            <a class="page-step" href="#" aria-disabled="true"><img src="assets/icon-left.svg" width="18" height="18" alt="">Previous</a>
-            <a class="page-num" href="#" aria-current="page">1</a>
-            <a class="page-num" href="#">2</a>
-            <a class="page-num" href="#">3</a>
-            <a class="page-num" href="#">4</a>
-            <a class="page-step" href="#">Next <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
-          </nav>
+          <div class="chips" id="chips" aria-label="Active filters"></div>
+          <div class="results-list" id="results-list"></div>
+          <nav class="pagination" id="pagination" aria-label="Results pages"></nav>
         </section>
       </div>
     </div>
@@ -159,33 +124,216 @@
   </footer>
 
   <script>
-    // Keep the active-filter chips in sync with the checkboxes (front-end only, no real filtering).
+    // Search results: every filter, the search box, sorting and pages work on the documents in js/documents.js.
+    // The current search is kept in the address bar, so Back, refresh and shared links show the same results.
     (function () {
-      const chips = document.querySelector('.chips');
-      const boxes = document.querySelectorAll('.filter-panel input[type=checkbox]');
-      function render() {
-        chips.innerHTML = '';
-        boxes.forEach(b => {
-          if (!b.checked) return;
-          const c = document.createElement('button');
-          c.type = 'button'; c.className = 'chip'; c.dataset.filter = b.value;
-          c.innerHTML = b.value + ' <img src="assets/icon-x-chip.svg" width="14" height="14" alt="Remove">';
-          c.onclick = () => { b.checked = false; render(); };
-          chips.appendChild(c);
-        });
+      var C = ARCH_COLLEGES, S = ARCH_SEARCH, esc = S.esc;
+      var PER_PAGE = 8, SHOW_COLLEGES = 5;
+      var $ = function (id) { return document.getElementById(id); };
+      var qInput = $("q"), dept = $("dept"), from = $("year-from"), to = $("year-to"), author = $("author"), sortSel = $("sort");
+
+      // ---- State from the address bar (the Browse Catalog form sends college, department, year and type)
+      var p = new URLSearchParams(location.search);
+      var state = {
+        q: p.get("q") || "",
+        types: p.getAll("type").filter(Boolean),
+        colleges: p.getAll("college").filter(function (c) { return C.names.indexOf(c) > -1; }),
+        department: p.get("department") || "",
+        from: p.get("from") || p.get("year") || "",
+        to: p.get("to") || p.get("year") || "",
+        author: p.get("author") || "",
+        sort: p.get("sort") || "",
+        page: Math.max(1, parseInt(p.get("page"), 10) || 1)
+      };
+      // A department implies its college
+      if (state.department && !state.colleges.length) state.colleges = [C.collegeOf(state.department)].filter(Boolean);
+      var showAllColleges = state.colleges.some(function (c) { return C.names.indexOf(c) >= SHOW_COLLEGES; });
+
+      function toUrl() {
+        var u = new URLSearchParams();
+        if (state.q) u.set("q", state.q);
+        state.types.forEach(function (t) { u.append("type", t); });
+        state.colleges.forEach(function (c) { u.append("college", c); });
+        if (state.department) u.set("department", state.department);
+        if (state.from) u.set("from", state.from);
+        if (state.to) u.set("to", state.to);
+        if (state.author) u.set("author", state.author);
+        if (state.sort) u.set("sort", state.sort);
+        if (state.page > 1) u.set("page", state.page);
+        var qs = u.toString();
+        return location.pathname + (qs ? "?" + qs : "");
       }
-      boxes.forEach(b => b.addEventListener('change', render));
-      document.getElementById('clear-all').onclick = () => { boxes.forEach(b => b.checked = false); render(); };
-      render();
+
+      // ---- Filter controls
+      qInput.value = state.q;
+      author.value = state.author;
+      C.fillYears(from, state.from, "Any");
+      C.fillYears(to, state.to, "Any");
+
+      function checkbox(name, value, count, checked) {
+        return '<label class="check"><input type="checkbox" name="' + name + '" value="' + esc(value) + '"' + (checked ? " checked" : "") + '>' +
+          '<span class="check__label">' + esc(value) + '</span><span class="check__count">' + count + '</span></label>';
+      }
+      function countBy(list, key) {
+        var n = {}; list.forEach(function (d) { n[d[key]] = (n[d[key]] || 0) + 1; }); return n;
+      }
+      function renderChecks() {
+        var tn = countBy(S.run(state, "types"), "type"), cn = countBy(S.run(state, "colleges"), "college");
+        $("type-list").innerHTML = S.TYPES.map(function (t) { return checkbox("type", t, tn[t] || 0, state.types.indexOf(t) > -1); }).join("");
+        var names = showAllColleges ? C.names : C.names.slice(0, SHOW_COLLEGES);
+        $("college-list").innerHTML = names.map(function (c) { return checkbox("college", c, cn[c] || 0, state.colleges.indexOf(c) > -1); }).join("");
+        var more = $("college-more");
+        more.textContent = showAllColleges ? "Show fewer" : "Show all " + C.names.length + " colleges";
+        more.setAttribute("aria-expanded", showAllColleges);
+      }
+      function renderDepartments() {
+        // Only the departments of the ticked colleges (all colleges when none is ticked)
+        dept.innerHTML = "";
+        dept.add(new Option("All departments", ""));
+        (state.colleges.length ? state.colleges : C.names).forEach(function (c) {
+          var g = document.createElement("optgroup"); g.label = c;
+          C.map[c].forEach(function (d) { g.appendChild(new Option(d, d)); });
+          dept.appendChild(g);
+        });
+        if (state.department && state.colleges.length && state.colleges.indexOf(C.collegeOf(state.department)) < 0) state.department = "";
+        dept.value = state.department;
+      }
+      function renderYears() {
+        // "To" can't be earlier than "From" (and the other way round)
+        Array.prototype.forEach.call(to.options, function (o) { o.disabled = !!(o.value && state.from && +o.value < +state.from); });
+        Array.prototype.forEach.call(from.options, function (o) { o.disabled = !!(o.value && state.to && +o.value > +state.to); });
+        from.value = state.from; to.value = state.to;
+      }
+
+      // ---- Active filter chips
+      function chip(label, remove) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "chip";
+        b.innerHTML = esc(label) + ' <img src="assets/icon-x-chip.svg" width="14" height="14" alt="Remove">';
+        b.onclick = function () { remove(); state.page = 1; update(); };
+        return b;
+      }
+      function renderChips() {
+        var box = $("chips"); box.innerHTML = "";
+        state.types.forEach(function (t) { box.appendChild(chip(t, function () { state.types.splice(state.types.indexOf(t), 1); })); });
+        state.colleges.forEach(function (c) { box.appendChild(chip(c, function () { state.colleges.splice(state.colleges.indexOf(c), 1); })); });
+        if (state.department) box.appendChild(chip(state.department, function () { state.department = ""; }));
+        if (state.from || state.to) {
+          var label = state.from && state.to ? (state.from === state.to ? state.from : state.from + "–" + state.to) : state.from ? state.from + " and later" : "Up to " + state.to;
+          box.appendChild(chip(label, function () { state.from = state.to = ""; }));
+        }
+        if (state.author) box.appendChild(chip("Author: " + state.author, function () { state.author = ""; author.value = ""; }));
+        box.hidden = !box.children.length;
+      }
+
+      // ---- Results and pages
+      function pageLink(n, label, cls, current, disabled) {
+        return '<a class="' + cls + '" href="#" data-page="' + n + '"' + (current ? ' aria-current="page"' : "") + (disabled ? ' aria-disabled="true" tabindex="-1"' : "") +
+          (cls === "page-num" ? ' aria-label="Page ' + n + '"' : "") + ">" + label + "</a>";
+      }
+      function pageNumbers(page, pages) {
+        // 1 … 4 5 6 … 9
+        var out = [];
+        for (var i = 1; i <= pages; i++) {
+          if (i === 1 || i === pages || Math.abs(i - page) <= 1) out.push(i);
+          else if (out[out.length - 1] !== "…") out.push("…");
+        }
+        return out;
+      }
+      function renderResults() {
+        var all = S.run(state), total = all.length;
+        var pages = Math.max(1, Math.ceil(total / PER_PAGE));
+        if (state.page > pages) state.page = pages;
+        var start = (state.page - 1) * PER_PAGE, shown = all.slice(start, start + PER_PAGE);
+
+        $("results-count").textContent = total + (total === 1 ? " result" : " results");
+        $("results-query").innerHTML = (state.q ? (all.partial ? "No document has every word of “" + esc(state.q) + "”. Showing documents with any of them" : "for “" + esc(state.q) + "”") : "All documents in the repository") +
+          (total > PER_PAGE ? ' <span class="results-range">· showing ' + (start + 1) + "–" + (start + shown.length) + "</span>" : "");
+        sortSel.value = state.sort || (S.terms(state.q).length ? "relevant" : "newest");
+
+        $("results-list").innerHTML = total ? shown.map(function (d) { return S.card(d, { heading: "h2", gold: true, summary: true, q: state.q }); }).join("") :
+          '<div class="card results-empty"><h2>No results found</h2><p>Nothing matches' + (state.q ? " “" + esc(state.q) + "”" : "") +
+          ' with the filters you picked. Try fewer words, check the spelling, or remove a filter.</p>' +
+          '<button class="btn btn--outline-maroon" type="button" id="empty-clear">Clear search and filters</button></div>';
+        var ec = $("empty-clear"); if (ec) ec.onclick = clearAll;
+
+        var nav = $("pagination");
+        if (pages < 2) { nav.innerHTML = ""; nav.hidden = true; return; }
+        nav.hidden = false;
+        nav.innerHTML = pageLink(state.page - 1, '<img src="assets/icon-left.svg" width="18" height="18" alt="">Previous', "page-step", false, state.page === 1) +
+          pageNumbers(state.page, pages).map(function (n) {
+            return n === "…" ? '<span class="page-gap" aria-hidden="true">…</span>' : pageLink(n, n, "page-num", n === state.page);
+          }).join("") +
+          pageLink(state.page + 1, 'Next <img src="assets/icon-right.svg" width="18" height="18" alt="">', "page-step", false, state.page === pages);
+      }
+
+      function update(push) {
+        renderChecks(); renderDepartments(); renderYears(); renderChips(); renderResults();
+        try { history[push ? "pushState" : "replaceState"](null, "", toUrl()); } catch (e) {}
+        document.title = "ARCH · " + (state.q ? "Search results for “" + state.q + "”" : "Search results");
+      }
+      function clearAll() {
+        state.q = ""; qInput.value = ""; state.types = []; state.colleges = []; state.department = "";
+        state.from = state.to = ""; state.author = ""; author.value = ""; state.page = 1;
+        update();
+      }
+
+      // ---- Events
+      $("search-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        state.q = qInput.value.trim(); state.sort = ""; state.page = 1;
+        update(true);
+      });
+      $("filter-panel").addEventListener("change", function (e) {
+        var t = e.target;
+        if (t.name === "type" || t.name === "college") {
+          var list = t.name === "type" ? state.types : state.colleges, i = list.indexOf(t.value);
+          if (t.checked && i < 0) list.push(t.value);
+          if (!t.checked && i > -1) list.splice(i, 1);
+        }
+        if (t === dept) {
+          state.department = dept.value;
+          // Picking a department ticks its college
+          var c = C.collegeOf(dept.value);
+          if (c && state.colleges.indexOf(c) < 0) { state.colleges.push(c); if (C.names.indexOf(c) >= SHOW_COLLEGES) showAllColleges = true; }
+        }
+        if (t === from) state.from = from.value;
+        if (t === to) state.to = to.value;
+        if (t === author) return;
+        state.page = 1;
+        update();
+      });
+      var typing;
+      author.addEventListener("input", function () {
+        clearTimeout(typing);
+        typing = setTimeout(function () { state.author = author.value.trim(); state.page = 1; update(); }, 250);
+      });
+      sortSel.addEventListener("change", function () { state.sort = sortSel.value; state.page = 1; update(); });
+      $("college-more").addEventListener("click", function () { showAllColleges = !showAllColleges; renderChecks(); });
+      $("clear-all").addEventListener("click", function () {
+        state.types = []; state.colleges = []; state.department = ""; state.from = state.to = ""; state.author = ""; author.value = ""; state.page = 1;
+        update();
+      });
+      $("pagination").addEventListener("click", function (e) {
+        var a = e.target.closest("a[data-page]");
+        if (!a) return;
+        e.preventDefault();
+        if (a.getAttribute("aria-disabled") === "true") return;
+        state.page = +a.getAttribute("data-page");
+        update(true);
+        $("results-count").scrollIntoView({ block: "start" });
+      });
+      window.addEventListener("popstate", function () { location.reload(); });
 
       // On narrow screens the filter panel starts collapsed behind a Show/Hide toggle.
-      const panel = document.getElementById('filter-panel');
-      const toggle = panel.querySelector('.filter-toggle');
-      toggle.addEventListener('click', () => {
-        const open = panel.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', open);
-        toggle.firstChild.textContent = open ? 'Hide ' : 'Show ';
+      var panel = $("filter-panel"), toggle = panel.querySelector(".filter-toggle");
+      toggle.addEventListener("click", function () {
+        var open = panel.classList.toggle("is-open");
+        toggle.setAttribute("aria-expanded", open);
+        toggle.firstChild.textContent = open ? "Hide " : "Show ";
       });
+
+      update();
     })();
   </script>
 </body>

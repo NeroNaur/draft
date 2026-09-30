@@ -17,25 +17,12 @@
   var STAGES = ["submitted", "review", "returned", "approved", "archived"];
   var TYPES = ["Thesis", "Capstone Project"];
 
-  // Departments grouped by college (used by the upload form; College is derived from the department)
-  var COLLEGES = {
-    "School of Business and Accountancy": ["Accountancy", "Business Administration", "Economics", "Marketing Management"],
-    "School of Computing": ["Computer Science", "Information Technology"],
-    "School of Education": ["Elementary Education", "Secondary Education"],
-    "School of Engineering and Architecture": ["Architecture", "Civil Engineering", "Computer Engineering", "Electrical Engineering", "Mechanical Engineering"],
-    "School of Nursing and Allied Medical Sciences": ["Medical Technology", "Nursing"],
-    "School of Arts and Sciences": ["Communication", "Psychology"],
-    "School of Hospitality and Tourism Management": ["Hospitality Management", "Tourism Management"],
-    "College of Criminal Justice Education and Forensics": ["Criminology"]
-  };
-  function collegeOf(dept) {
-    for (var c in COLLEGES) if (COLLEGES[c].indexOf(dept) > -1) return c;
-    return "";
-  }
+  // Colleges and departments come from the shared list (js/colleges.js)
+  var COLLEGES = ARCH_COLLEGES.map, collegeOf = ARCH_COLLEGES.collegeOf;
 
   var SEED = [
     { id: "s1", title: "Effects of Community Pantries on Household Food Security in Angeles City", type: "Thesis", submitted: "Sep 16, 2026", status: "review",
-      creator: "Manalo, Patricia R.; Cruz, Daniel S.", subject: "Community pantries; Food security; Households", department: "Economics",
+      creator: "Manalo, Patricia R.; Cruz, Daniel S.", subject: "Community pantries; Food security; Households", department: "Business Economics",
       abstract: "This thesis examines whether community pantries set up during and after the pandemic improved household food security in selected barangays of Angeles City.",
       file: "Community-Pantries-Food-Security-Thesis.pdf · 3.8 MB",
       history: [["review", "Sep 18, 2026"], ["submitted", "Sep 16, 2026", "You"]] },
