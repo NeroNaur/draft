@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Review submission</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["uro"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="uro-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav main-nav--6" aria-label="Main">
+        <a href="uro-catalog.html">Browse Repository</a>
+        <a href="uro-dashboard.html">Dashboard</a>
+        <a href="uro-review.html" aria-current="page">Research Review</a>
+        <a href="uro-proposals.html">Proposals</a>
+        <a href="uro-requests.html">View Requests</a>
+        <a href="uro-users.html">Users</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container detail-page">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="uro-review.html">Research Review</a>
+        <img src="assets/icon-right-muted.svg" width="16" height="16" alt="">
+        <span aria-current="page">Review submission</span>
+      </nav>
+
+      <div class="title-block" style="gap:12px">
+        <div class="prop-meta"><span id="d-status"></span><span class="tag" id="d-type"></span><span id="d-by"></span></div>
+        <h1 class="page-title" id="d-title"></h1>
+      </div>
+
+      <div class="review-cols">
+        <section class="card preview-card" aria-labelledby="pv-title">
+          <div class="preview-card__head">
+            <h2 class="card-title" id="pv-title">Document preview</h2>
+            <button class="link-arrow" type="button" id="full-viewer">Open in full viewer <i class="ic" data-icon="eye" style="width:18px;height:18px"></i></button>
+          </div>
+          <div class="preview-card__stage" id="stage">
+            <div class="page-mock" id="page-mock" aria-label="Page preview">
+              <p class="page-mock__school">Holy Angel University</p>
+              <p class="page-mock__title" id="pm-title"></p>
+              <p class="page-mock__sub" id="pm-sub"></p>
+              <div class="page-mock__lines" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span class="short"></span>
+                <i></i><span></span><span></span><span></span><span></span><span></span><span></span><span class="short"></span>
+                <i></i><span></span><span></span><span></span><span></span><span></span><span class="short"></span>
+              </div>
+            </div>
+          </div>
+          <p class="preview-card__note" id="pv-note" hidden>Sample record: no PDF was uploaded for it in this prototype, so a placeholder page is shown.</p>
+          <div class="pager">
+            <button type="button" id="pg-prev" aria-label="Previous page"><img src="assets/icon-left.svg" width="18" height="18" alt=""></button>
+            <span id="pg-label">Page 1 of 1</span>
+            <button type="button" id="pg-next" aria-label="Next page"><img src="assets/icon-right.svg" width="18" height="18" alt=""></button>
+          </div>
+        </section>
+
+        <div class="side-col">
+          <form class="card info-card" id="meta-form" novalidate aria-labelledby="info-title">
+            <div>
+              <h2 class="card-title" id="info-title">Document information</h2>
+              <p class="info-card__note" id="info-note">You can correct any detail here before you approve.</p>
+            </div>
+            <div class="field" data-field="title">
+              <label for="m-title">Title</label>
+              <textarea class="input input--auto" id="m-title" name="title" rows="2" required></textarea>
+              <p class="field__error"></p>
+            </div>
+            <div class="field" data-field="creator">
+              <label for="m-creator">Author (Creator)</label>
+              <input class="input" id="m-creator" name="creator" type="text" required>
+              <p class="field__error"></p>
+            </div>
+            <div class="field">
+              <label for="m-subject">Keywords (Subject)</label>
+              <input class="input" id="m-subject" name="subject" type="text">
+            </div>
+            <div class="field" data-field="abstract">
+              <label for="m-abstract">Summary (Description)</label>
+              <textarea class="input input--auto" id="m-abstract" name="abstract" rows="3" required></textarea>
+              <p class="field__error"></p>
+            </div>
+            <div class="field-row field-row--tight">
+              <div class="field">
+                <label for="m-type">Document type</label>
+                <span class="select"><select id="m-type" name="type"></select></span>
+              </div>
+              <div class="field">
+                <label for="m-college">College</label>
+                <span class="select"><select id="m-college" name="college"></select></span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="m-dept">Department</label>
+              <span class="select"><select id="m-dept" name="department"></select></span>
+            </div>
+          </form>
+
+          <section class="card decision-card" id="decision" aria-labelledby="dec-title">
+            <h2 class="card-title" id="dec-title">Your decision</h2>
+            <button class="btn btn--maroon" type="button" id="approve"><i class="ic" data-icon="checkc"></i>Approve</button>
+            <button class="btn btn--outline-maroon" type="button" id="return"><i class="ic" data-icon="undo"></i>Return to uploader</button>
+          </section>
+
+          <section class="card decided-card" id="decided" hidden aria-labelledby="decided-title">
+            <h2 class="card-title" id="decided-title">Decision</h2>
+            <p id="decided-text"></p>
+            <div id="decided-items" class="decided-items"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var S = ARCH_SUBMISSIONS, A = ARCH_ADMIN, esc = A.esc;
+      var id = new URLSearchParams(location.search).get("id");
+      var p = S.get(id) || S.everything().filter(function (x) { return x.status === "submitted" || x.status === "review"; })[0] || S.everything()[0];
+      // Opening a newly submitted item starts the review
+      if (p.status === "submitted") { S.startReview(p.id); p = S.get(p.id); }
+      document.title = "ARCH · Review · " + p.title;
+
+      document.getElementById("d-status").innerHTML = S.pill(p.status, 18);
+      document.getElementById("d-type").textContent = p.type;
+      var college = S.collegeOf(p.department);
+      document.getElementById("d-by").textContent = "Submitted " + p.submitted + " by " + p.uploader + " (" + (p.uploaderRole || college) + ")";
+      document.getElementById("d-title").textContent = p.title;
+
+      // ---- Preview: the uploaded PDF (PDF.js) when this browser has it, otherwise a placeholder page
+      var pages = p.pages || 60, pg = 1, real = null;
+      document.getElementById("pm-title").textContent = p.title;
+      document.getElementById("pm-sub").textContent = "A " + p.type + " Presented to the " + (college || "University");
+      function paint() {
+        document.getElementById("pg-label").textContent = "Page " + pg + " of " + pages;
+        var mock = document.getElementById("page-mock");
+        if (real) real.goto(pg); else if (mock) mock.classList.toggle("is-inner", pg > 1);
+        document.getElementById("pg-prev").disabled = pg === 1;
+        document.getElementById("pg-next").disabled = pg === pages;
+      }
+      document.getElementById("pg-prev").addEventListener("click", function () { if (pg > 1) { pg--; paint(); } });
+      document.getElementById("pg-next").addEventListener("click", function () { if (pg < pages) { pg++; paint(); } });
+      if (p.fileKey) {
+        var stage = document.getElementById("stage");
+        ARCH_PDF.preview(stage, { fileKey: p.fileKey }, { inset: 64, label: p.title, onReady: function (pdf, st) { real = st; pages = pdf.numPages; paint(); } })
+          .catch(function () { document.getElementById("pv-note").hidden = false; document.getElementById("pv-note").textContent = "The uploaded PDF is no longer in this browser session."; });
+      } else {
+        document.getElementById("pv-note").hidden = false;
+      }
+      paint();
+      document.getElementById("full-viewer").addEventListener("click", function () {
+        if (p.fileKey) ARCH_PDF.open({ fileKey: p.fileKey }, { title: p.title, page: pg });
+        else S.toast("This sample record has no PDF file. Upload one as an instructor to try the full viewer.");
+      });
+
+      // ---- Metadata form (Dublin Core terms in brackets)
+      var form = document.getElementById("meta-form"), typeSel = form.elements.type, colSel = form.elements.college, deptSel = form.elements.department;
+      S.TYPES.forEach(function (t) { typeSel.add(new Option(t, t)); });
+      Object.keys(S.COLLEGES).forEach(function (c) { colSel.add(new Option(c, c)); });
+      function fillDepts(c, keep) {
+        deptSel.innerHTML = "";
+        (S.COLLEGES[c] || []).forEach(function (d) { deptSel.add(new Option(d, d)); });
+        if (keep) deptSel.value = keep;
+      }
+      colSel.addEventListener("change", function () { fillDepts(colSel.value); });
+      form.elements.title.value = p.title; form.elements.creator.value = p.creator || "";
+      form.elements.subject.value = p.subject || ""; form.elements.abstract.value = p.abstract || "";
+      typeSel.value = p.type; colSel.value = college; fillDepts(college, p.department);
+      form.querySelectorAll("textarea.input--auto").forEach(function (t) {
+        function fit() { t.style.height = "auto"; t.style.height = t.scrollHeight + 2 + "px"; }
+        t.addEventListener("input", fit); setTimeout(fit, 0);
+      });
+
+      function meta() {
+        return { title: form.elements.title.value.trim(), creator: form.elements.creator.value.trim(), subject: form.elements.subject.value.trim(),
+          abstract: form.elements.abstract.value.trim(), type: typeSel.value, department: deptSel.value };
+      }
+      function valid() {
+        var v = meta(), first = null;
+        var req = { title: "The title can’t be empty.", creator: "Add at least one author.", abstract: "The summary can’t be empty." };
+        Object.keys(req).forEach(function (k) {
+          var f = form.querySelector('[data-field="' + k + '"]'), bad = !v[k];
+          f.classList.toggle("is-invalid", bad);
+          f.querySelector(".field__error").textContent = bad ? req[k] : "";
+          if (bad && !first) first = form.elements[k];
+        });
+        if (first) first.focus();
+        return !first;
+      }
+      form.addEventListener("input", function (e) {
+        var f = e.target.closest(".field"); if (f) { f.classList.remove("is-invalid"); var er = f.querySelector(".field__error"); if (er) er.textContent = ""; }
+      });
+
+      var waiting = p.status === "submitted" || p.status === "review";
+      if (waiting) {
+        document.getElementById("approve").addEventListener("click", function () {
+          if (!valid()) return;
+          S.approve(p.id, meta());
+          location.href = "uro-review.html?done=" + p.id + "&status=approved";
+        });
+        document.getElementById("return").addEventListener("click", function () {
+          if (!valid()) return;
+          A.commentsModal({
+            title: "Return to uploader", doc: p.title,
+            desc: p.uploader + " will see these comments on the submission and can edit and resubmit it.",
+            submitLabel: "Return with comments", submitIcon: "undo",
+            onSubmit: function (items) {
+              S.returnTo(p.id, items, meta());
+              location.href = "uro-review.html?done=" + p.id + "&status=returned";
+            }
+          });
+        });
+      } else {
+        // Already decided: read-only
+        form.querySelectorAll("input, textarea, select").forEach(function (el) { el.disabled = true; });
+        document.getElementById("info-note").textContent = "This submission has already been decided, so its details are read-only here.";
+        document.getElementById("decision").hidden = true;
+        var box = document.getElementById("decided"); box.hidden = false;
+        var h = p.history[0];
+        var txt = { approved: "Approved", archived: "Archived", returned: "Returned to " + p.uploader }[p.status] || S.STATUS[p.status].label;
+        document.getElementById("decided-text").textContent = txt + " on " + h[1] + (h[2] ? " by " + h[2] : "") + "." + (p.status === "returned" ? " Waiting for the uploader to resubmit." : "");
+        if (p.status === "returned" && p.feedback) {
+          document.getElementById("decided-items").innerHTML = p.feedback.items.map(function (t, i) {
+            return '<div class="fb-item"><span class="fb-item__num">' + (i + 1) + '</span><p>' + esc(t) + '</p></div>';
+          }).join("");
+        }
+      }
+      ARCH_ICONS.hydrate();
+    })();
+  </script>
+</body>
+</html>

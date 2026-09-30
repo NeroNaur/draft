@@ -1,0 +1,103 @@
+/* ARCH sign-in choice (A1) and Staff & Faculty Login (A2), from Figma "Login" section */
+
+/* ---------- A1 · Landing / Portal Page ---------- */
+.access-page { position: relative; background: var(--accent-cream); display: flex; flex-direction: column; min-height: 100vh; }
+.access-page__bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.access-page__bg img { position: absolute; top: 0; left: -7.65%; width: 115.31%; height: 100%; max-width: none; object-fit: cover; opacity: .2; }
+.access-page > *:not(.access-page__bg) { position: relative; }
+.access-main, .syslogin__form-area { background: transparent; }
+
+.access-top { background: var(--primary); }
+.access-top .container { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 28px; }
+.access-top__org { font-size: 14px; line-height: 21px; color: var(--accent-yellow); white-space: nowrap; }
+
+.access-main { flex: 1 0 auto; display: flex; flex-direction: column; }
+.access-hero { text-align: center; padding: 56px var(--gutter) 0; display: flex; flex-direction: column; gap: 8px; }
+.access-hero h1 { font-family: var(--font-heading); font-weight: 600; font-size: 40px; line-height: 48px; color: var(--accent-black); }
+.access-hero p { font-size: 18px; line-height: 26px; color: var(--text-muted); }
+
+.paths { display: flex; justify-content: center; align-items: stretch; gap: 32px; padding: 56px var(--gutter) 64px; }
+.path {
+  width: 348px; max-width: 100%; background: var(--white); border: 2px solid var(--secondary); border-radius: var(--radius);
+  padding: 36px; display: flex; flex-direction: column; gap: 18px; transition: box-shadow .15s, transform .15s;
+}
+.path--staff { border-color: var(--primary); }
+.path:hover { box-shadow: 0 10px 30px rgba(43,41,39,.12); transform: translateY(-2px); }
+.path .icon-circle { width: 64px; height: 64px; border-radius: 32px; }
+.path .icon-circle img { width: 30px; height: 30px; }
+.path h2 { font-family: var(--font-heading); font-weight: 600; font-size: 26px; line-height: 33px; }
+.path__desc { color: var(--text-muted); }
+.path__who { display: flex; flex-direction: column; gap: 8px; }
+.path__who-label { font-weight: 600; font-size: 12px; line-height: 18px; letter-spacing: .06em; text-transform: uppercase; color: #8a8178; }
+.path__who li { display: flex; gap: 8px; align-items: center; font-size: 15px; line-height: 20px; }
+.path__who img { width: 16px; height: 16px; flex-shrink: 0; }
+.path .btn { width: 100%; padding-inline: 24px; margin-top: auto; }
+
+.access-info { display: flex; gap: 12px; align-items: flex-start; padding: 16px; color: var(--text-muted); margin-top: auto; }
+.access-info img { width: 22px; height: 22px; flex-shrink: 0; margin-top: 1px; }
+
+/* ---------- A2 · System Login ---------- */
+.syslogin { background: var(--accent-cream); min-height: 100vh; display: flex; flex-direction: column; }
+.syslogin__split { flex: 1 0 auto; display: flex; min-height: 831px; }
+.syslogin__brand {
+  width: 640px; flex-shrink: 0; background: var(--primary); padding: 64px 72px;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
+}
+.syslogin__msg { display: flex; flex-direction: column; gap: 20px; max-width: 480px; }
+.syslogin__rule { width: 72px; height: 4px; background: var(--secondary); }
+.syslogin__msg h1 { font-family: var(--font-heading); font-weight: 600; font-size: 36px; line-height: 45px; color: var(--white); }
+.syslogin__msg p { font-size: 18px; line-height: 27px; color: var(--blush); max-width: 460px; }
+.syslogin__back { font-size: 14px; line-height: 20px; color: var(--accent-yellow); max-width: 440px; }
+.syslogin__back a { text-decoration: underline; font-weight: 600; }
+
+.syslogin__form-area { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 64px; }
+.syslogin__card { width: 460px; max-width: 100%; padding: 44px; display: flex; flex-direction: column; gap: 20px; }
+.syslogin__card > .syslogin__eyebrow { font-weight: 600; font-size: 14px; line-height: 21px; letter-spacing: .06em; text-transform: uppercase; color: var(--primary); }
+.syslogin__card h2 { font-family: var(--font-heading); font-weight: 600; font-size: 34px; line-height: 43px; }
+.syslogin__card > p { color: var(--text-muted); }
+#system-form { display: flex; flex-direction: column; gap: 20px; }
+#system-form .input { color: var(--accent-black); }
+.pw-wrap { position: relative; }
+.pw-wrap .input { padding-right: 52px; }
+.pw-toggle {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 40px; height: 36px; border: 0; background: none;
+  border-radius: 6px; cursor: pointer; display: grid; place-items: center; color: var(--text-muted);
+}
+.pw-toggle:hover { background: var(--surface-tint); }
+.pw-toggle img { width: 18px; height: 18px; }
+.syslogin__options { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.remember { display: flex; gap: 8px; align-items: center; font-size: 15px; line-height: 23px; cursor: pointer; }
+.remember input {
+  appearance: none; -webkit-appearance: none; margin: 0; width: 20px; height: 20px; border: 1.5px solid var(--border-strong);
+  border-radius: 4px; background: var(--white); cursor: pointer; flex-shrink: 0;
+}
+.remember input:checked { background: var(--primary) url("../assets/icon-check.svg") center / 14px 14px no-repeat; border-color: var(--primary); }
+#system-form .btn { width: 100%; padding-inline: 24px; }
+.syslogin__alert { border-radius: 6px; padding: 12px 14px; font-size: 15px; line-height: 22px; }
+.syslogin__alert--error { background: var(--denied-bg); color: var(--denied-title); border: 1px solid var(--denied-border); }
+.syslogin__alert--info { background: var(--pending-bg); color: var(--pending-fg); }
+.syslogin__alert:empty { display: none; }
+
+@media (max-width: 1100px) {
+  .syslogin__brand { width: 42%; padding: 48px 40px; }
+}
+@media (max-width: 800px) {
+  .paths { flex-direction: column; align-items: center; padding-top: 36px; gap: 20px; }
+  .path { width: 100%; max-width: 480px; }
+  .access-hero h1 { font-size: 30px; line-height: 38px; }
+  .access-top__org { display: none; }
+  .access-top .container { padding-block: 16px; }
+  .syslogin__split { flex-direction: column; min-height: 0; }
+  .syslogin__brand { width: 100%; padding: 28px var(--gutter) 32px; gap: 24px; }
+  .syslogin__msg h1 { font-size: 28px; line-height: 36px; }
+  .syslogin__msg p { font-size: 16px; line-height: 24px; }
+  .syslogin__form-area { padding: 32px var(--gutter) 48px; }
+}
+@media (max-width: 560px) {
+  .path { padding: 24px; }
+  .syslogin__card { padding: 28px 22px; }
+  .syslogin__card h2 { font-size: 28px; line-height: 36px; }
+}
+.signed-as { background: var(--surface-tint); border-radius: 6px; padding: 10px 14px; font-size: 15px; line-height: 22px; }
+.signed-as b { font-weight: 600; }
+.signed-as a { font-weight: 600; color: var(--primary); text-decoration: underline; white-space: nowrap; }

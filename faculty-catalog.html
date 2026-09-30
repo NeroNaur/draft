@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Browse Repository</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["faculty"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="faculty-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="faculty-catalog.html" aria-current="page">Browse Repository</a>
+        <a href="faculty-dashboard.html">Dashboard</a>
+        <a href="faculty-submit.html">Submit Proposal</a>
+        <a href="faculty-proposals.html">My Proposals</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <img class="hero__bg" src="assets/hero-campus.jpg" alt="">
+      <div class="container">
+        <h1>Search HAU Research</h1>
+        <p class="hero__lead">Find theses, capstone projects, dissertations, and faculty research from across the university.</p>
+        <form class="hero-search" action="results.html" method="get" role="search" style="display:contents">
+          <div class="search-bar">
+            <img src="assets/icon-search.svg" width="24" height="24" alt="">
+            <label class="visually-hidden" for="q">Search the repository</label>
+            <input id="q" type="search" name="q" placeholder="Search by title, author, or keyword">
+            <button class="btn btn--gold" type="submit">Search</button>
+          </div>
+          <div class="hero-filters">
+            <label class="select select--pill"><span class="visually-hidden">College</span>
+              <select name="college">
+                <option value="">All colleges</option>
+                <option>College of Allied Health Studies</option>
+                <option>College of Business and Accountancy</option>
+                <option>College of Computing Studies</option>
+                <option>College of Education</option>
+                <option>College of Engineering and Architecture</option>
+              </select>
+            </label>
+            <label class="select select--pill"><span class="visually-hidden">Department</span>
+              <select name="department">
+                <option value="">All departments</option>
+                <option>Information Technology</option>
+                <option>Computer Science</option>
+                <option>Nursing</option>
+              </select>
+            </label>
+            <label class="select select--pill"><span class="visually-hidden">Year</span>
+              <select name="year">
+                <option value="">Any year</option>
+                <option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option>
+              </select>
+            </label>
+            <label class="select select--pill"><span class="visually-hidden">Document type</span>
+              <select name="type">
+                <option value="">All document types</option>
+                <option>Thesis</option><option>Capstone Project</option><option>Dissertation</option><option>Faculty Research</option>
+              </select>
+            </label>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- HAU Research Agenda -->
+    <section class="agenda" aria-labelledby="agenda-title">
+      <img class="agenda__shape" src="assets/agenda-band.svg" alt="">
+      <div class="agenda__inner">
+        <img class="agenda__wheel" src="assets/research-agenda-wheel.png" width="436" height="436"
+             alt="HAU Research Agenda wheel: 1 Quality Education for Future-Ready Workforce, 2 Sustainable Food and Resource Management, 3 Organizational Resiliency and Quality Management, 4 Advance Technology and Innovation, 5 Community Development and Cultural Preservation, 6 Holistic Health and Well-Being, 7 Ethical Leadership and Good Governance, 8 Catholic Spirituality and Character Formation">
+        <div class="agenda__text">
+          <h2 id="agenda-title">HAU RESEARCH AGENDA</h2>
+          <p>Holy Angel University’s research agenda reflects a strategic integration of its mission, vision, and four strategic themes with a strong commitment to global sustainability and social responsibility. These priorities aim to cultivate a research culture that advances academic excellence, ethical leadership, and community development, while aligning with the United Nations' Sustainable Development Goals. By focusing on critical areas such as education, sustainability, technology, governance, and Catholic values, the university ensures that its research efforts address both local and global challenges, fostering meaningful societal impact and positioning itself as a forward-thinking, values-driven institution.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="container home-content">
+      <section class="home-block" aria-labelledby="browse-title">
+        <h2 class="section-title" id="browse-title">Browse by document type</h2>
+        <ul class="type-tiles">
+          <li><a class="card type-tile" href="results.html?type=Thesis">
+            <span class="icon-circle"><img src="assets/icon-cap.svg" width="28" height="28" alt=""></span>
+            <span class="type-tile__name">Theses</span><span class="type-tile__count">412 documents</span></a></li>
+          <li><a class="card type-tile" href="results.html?type=Capstone%20Project">
+            <span class="icon-circle"><img src="assets/icon-layers.svg" width="28" height="28" alt=""></span>
+            <span class="type-tile__name">Capstone Projects</span><span class="type-tile__count">538 documents</span></a></li>
+          <li><a class="card type-tile" href="results.html?type=Dissertation">
+            <span class="icon-circle"><img src="assets/icon-book.svg" width="28" height="28" alt=""></span>
+            <span class="type-tile__name">Dissertations</span><span class="type-tile__count">46 documents</span></a></li>
+          <li><a class="card type-tile" href="results.html?type=Faculty%20Research">
+            <span class="icon-circle"><img src="assets/icon-flask.svg" width="28" height="28" alt=""></span>
+            <span class="type-tile__name">Faculty Research</span><span class="type-tile__count">252 documents</span></a></li>
+        </ul>
+      </section>
+
+      <section class="home-block" aria-labelledby="new-title">
+        <h2 class="section-title" id="new-title">New Studies</h2>
+        <div class="recent-row">
+          <article class="card doc-card">
+            <div class="meta"><span class="tag">Capstone Project</span><span>2025</span></div>
+            <h3 class="doc-card__title"><a href="detail.html?doc=enroll">Design and Implementation of a Web-Based Enrollment Analytics Dashboard for Higher Education Institutions</a></h3>
+            <p class="doc-card__authors">Dela Cruz, Juan P.; Santos, Maria L.</p>
+            <p class="doc-card__college">College of Computing Studies</p>
+            <a class="link-arrow" href="detail.html?doc=enroll">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
+          </article>
+          <article class="card doc-card">
+            <div class="meta"><span class="tag">Thesis</span><span>2024</span></div>
+            <h3 class="doc-card__title"><a href="detail.html?doc=nursing">Effects of Simulation-Based Learning on the Clinical Competence of Nursing Students</a></h3>
+            <p class="doc-card__authors">Garcia, Angelica R.</p>
+            <p class="doc-card__college">College of Allied Health Studies</p>
+            <a class="link-arrow" href="detail.html?doc=nursing">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
+          </article>
+          <article class="card doc-card">
+            <div class="meta"><span class="tag">Thesis</span><span>2024</span></div>
+            <h3 class="doc-card__title"><a href="detail.html?doc=seismic">Seismic Performance of Low-Rise Reinforced Concrete Buildings in Central Luzon</a></h3>
+            <p class="doc-card__authors">Mendoza, Rafael T.; Villanueva, Carla S.</p>
+            <p class="doc-card__college">College of Engineering and Architecture</p>
+            <a class="link-arrow" href="detail.html?doc=seismic">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+</body>
+</html>

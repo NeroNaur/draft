@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Search results</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["general", "faculty", "instructor", "uro"]);</script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="catalog.html" aria-current="page">Browse Catalog</a>
+        <a href="requests.html">My View Requests <span class="nav-badge" data-pending-count hidden></span></a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials>MS</span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name>Maria Santos</span><span class="user-menu__role" data-user-role>Student</span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container results-page">
+      <form class="search-bar search-bar--outlined" action="results.html" method="get" role="search">
+        <img src="assets/icon-search.svg" width="24" height="24" alt="">
+        <label class="visually-hidden" for="q">Search the repository</label>
+        <input id="q" type="search" name="q" value="research" placeholder="Search by title, author, or keyword">
+        <button class="btn btn--gold" type="submit" style="padding-inline:48px">Search</button>
+      </form>
+
+      <div class="results-layout">
+        <!-- Filters -->
+        <aside class="card filter-panel" id="filter-panel" aria-labelledby="filter-title">
+          <div class="filter-panel__head">
+            <h2 id="filter-title">Filter results</h2>
+            <div class="filter-panel__actions">
+              <button class="text-link" type="button" id="clear-all">Clear all</button>
+              <button class="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel">Show <img src="assets/icon-down-sm.svg" width="18" height="18" alt=""></button>
+            </div>
+          </div>
+
+          <div class="filter-group" role="group" aria-labelledby="fg1">
+            <p class="filter-group__label" id="fg1">Document type</p>
+            <label class="check"><input type="checkbox" name="type" value="Thesis" checked><span class="check__label">Thesis</span><span class="check__count">14</span></label>
+            <label class="check"><input type="checkbox" name="type" value="Capstone Project"><span class="check__label">Capstone Project</span><span class="check__count">6</span></label>
+            <label class="check"><input type="checkbox" name="type" value="Dissertation"><span class="check__label">Dissertation</span><span class="check__count">2</span></label>
+            <label class="check"><input type="checkbox" name="type" value="Faculty Research"><span class="check__label">Faculty Research</span><span class="check__count">2</span></label>
+          </div>
+
+          <div class="filter-group" role="group" aria-labelledby="fg2">
+            <p class="filter-group__label" id="fg2">College</p>
+            <label class="check"><input type="checkbox" name="college" value="Allied Health Studies" checked><span class="check__label">Allied Health Studies</span><span class="check__count">9</span></label>
+            <label class="check"><input type="checkbox" name="college" value="Computing Studies"><span class="check__label">Computing Studies</span><span class="check__count">5</span></label>
+            <label class="check"><input type="checkbox" name="college" value="Engineering and Architecture"><span class="check__label">Engineering and Architecture</span><span class="check__count">4</span></label>
+            <label class="check"><input type="checkbox" name="college" value="Business and Accountancy"><span class="check__label">Business and Accountancy</span><span class="check__count">3</span></label>
+            <label class="check"><input type="checkbox" name="college" value="Education"><span class="check__label">Education</span><span class="check__count">3</span></label>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-group__label" for="dept">Department</label>
+            <span class="select"><select id="dept"><option>All departments</option><option>Information Technology</option><option>Computer Science</option><option>Nursing</option></select></span>
+          </div>
+
+          <div class="filter-group" role="group" aria-labelledby="fg3">
+            <p class="filter-group__label" id="fg3">Year</p>
+            <div class="year-row">
+              <label class="field-label">From
+                <span class="select"><select><option>2015</option><option>2016</option><option>2017</option><option>2018</option><option>2019</option><option>2020</option></select></span>
+              </label>
+              <label class="field-label">To
+                <span class="select"><select><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-group__label" for="author">Author</label>
+            <input class="input" id="author" type="text" placeholder="Author’s name">
+          </div>
+        </aside>
+
+        <!-- Results -->
+        <section class="results-col" aria-labelledby="results-count">
+          <div class="results-head">
+            <div>
+              <h1 class="results-count" id="results-count">24 results</h1>
+              <p class="results-query">for “research”</p>
+            </div>
+            <label class="sort">Sort by
+              <span class="select select--sm"><select><option>Newest first</option><option>Oldest first</option><option>Title A–Z</option><option>Most relevant</option></select></span>
+            </label>
+          </div>
+
+          <div class="chips" aria-label="Active filters">
+            <button class="chip" type="button" data-filter="Thesis">Thesis <img src="assets/icon-x-chip.svg" width="14" height="14" alt="Remove"></button>
+            <button class="chip" type="button" data-filter="Allied Health Studies">Allied Health Studies <img src="assets/icon-x-chip.svg" width="14" height="14" alt="Remove"></button>
+          </div>
+
+          <article class="doc-card card doc-card--gold">
+            <div class="meta"><span class="tag">Capstone Project</span><span>2025</span></div>
+            <h2 class="doc-card__title"><a href="detail.html?doc=enroll">Design and Implementation of a Web-Based Enrollment Analytics Dashboard for Higher Education Institutions</a></h2>
+            <p class="doc-card__authors">Dela Cruz, Juan P.; Santos, Maria L.</p>
+            <p class="doc-card__college">College of Computing Studies</p>
+            <p class="doc-card__summary">This capstone project develops a dashboard that helps registrars monitor enrollment trends and forecast section demand.</p>
+            <a class="link-arrow" href="detail.html?doc=enroll">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
+          </article>
+          <article class="doc-card card doc-card--gold">
+            <div class="meta"><span class="tag">Faculty Research</span><span>2023</span></div>
+            <h2 class="doc-card__title"><a href="detail.html?doc=finlit">Financial Literacy and Small Enterprise Sustainability in Pampanga</a></h2>
+            <p class="doc-card__authors">Bautista, Erlinda M.</p>
+            <p class="doc-card__college">College of Business and Accountancy</p>
+            <p class="doc-card__summary">This study examines how financial literacy relates to the long-term survival of micro and small enterprises.</p>
+            <a class="link-arrow" href="detail.html?doc=finlit">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
+          </article>
+          <article class="doc-card card doc-card--gold">
+            <div class="meta"><span class="tag">Dissertation</span><span>2022</span></div>
+            <h2 class="doc-card__title"><a href="detail.html?doc=teacher">Teacher Digital Competence and Student Engagement in Blended Classrooms</a></h2>
+            <p class="doc-card__authors">Tolentino, Grace A.</p>
+            <p class="doc-card__college">College of Education</p>
+            <p class="doc-card__summary">A mixed-methods dissertation on how teacher digital skills shape student engagement in blended learning.</p>
+            <a class="link-arrow" href="detail.html?doc=teacher">View details <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
+          </article>
+
+          <nav class="pagination" aria-label="Results pages">
+            <a class="page-step" href="#" aria-disabled="true"><img src="assets/icon-left.svg" width="18" height="18" alt="">Previous</a>
+            <a class="page-num" href="#" aria-current="page">1</a>
+            <a class="page-num" href="#">2</a>
+            <a class="page-num" href="#">3</a>
+            <a class="page-num" href="#">4</a>
+            <a class="page-step" href="#">Next <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>
+          </nav>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+
+  <script>
+    // Keep the active-filter chips in sync with the checkboxes (front-end only, no real filtering).
+    (function () {
+      const chips = document.querySelector('.chips');
+      const boxes = document.querySelectorAll('.filter-panel input[type=checkbox]');
+      function render() {
+        chips.innerHTML = '';
+        boxes.forEach(b => {
+          if (!b.checked) return;
+          const c = document.createElement('button');
+          c.type = 'button'; c.className = 'chip'; c.dataset.filter = b.value;
+          c.innerHTML = b.value + ' <img src="assets/icon-x-chip.svg" width="14" height="14" alt="Remove">';
+          c.onclick = () => { b.checked = false; render(); };
+          chips.appendChild(c);
+        });
+      }
+      boxes.forEach(b => b.addEventListener('change', render));
+      document.getElementById('clear-all').onclick = () => { boxes.forEach(b => b.checked = false); render(); };
+      render();
+
+      // On narrow screens the filter panel starts collapsed behind a Show/Hide toggle.
+      const panel = document.getElementById('filter-panel');
+      const toggle = panel.querySelector('.filter-toggle');
+      toggle.addEventListener('click', () => {
+        const open = panel.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', open);
+        toggle.firstChild.textContent = open ? 'Hide ' : 'Show ';
+      });
+    })();
+  </script>
+</body>
+</html>

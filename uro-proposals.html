@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Proposal Management</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["uro"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="uro-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav main-nav--6" aria-label="Main">
+        <a href="uro-catalog.html">Browse Repository</a>
+        <a href="uro-dashboard.html">Dashboard</a>
+        <a href="uro-review.html">Research Review</a>
+        <a href="uro-proposals.html" aria-current="page">Proposals</a>
+        <a href="uro-requests.html">View Requests</a>
+        <a href="uro-users.html">Users</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container fac-page fac-page--tight">
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title">Proposal Management</h1>
+          <p class="page-sub">Move each proposal through its review stages and record the outcome.</p>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <label class="search-field">
+          <i class="ic" data-icon="search"></i>
+          <span class="visually-hidden">Search proposals</span>
+          <input type="search" id="q" placeholder="Search by title or faculty name">
+        </label>
+        <span class="select filter-bar__select"><label class="visually-hidden" for="college">College</label><select id="college"><option value="">All colleges</option></select></span>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Filter by status" id="tabs"></div>
+
+      <div class="card req-table" role="table" aria-label="Research proposals">
+        <div class="req-row req-row--head a-row pm-row" role="row">
+          <span role="columnheader">Proposal title</span><span role="columnheader">Faculty</span><span role="columnheader">College</span><span role="columnheader">Current status</span><span role="columnheader">Update status</span>
+        </div>
+        <div id="rows"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var P = ARCH_PROPOSALS, A = ARCH_ADMIN, esc = A.esc;
+      var params = new URLSearchParams(location.search);
+      var current = params.get("status") || "all";
+      var KEYS = ["all", "submitted", "review", "turnitin", "peer", "irb", "approved", "declined"];
+      if (KEYS.indexOf(current) === -1) current = "all";
+      var list, q = document.getElementById("q"), colSel = document.getElementById("college"), tabs = document.getElementById("tabs");
+
+      function load() { list = P.everything().sort(A.byNewest); }
+      load();
+      var colleges = list.map(function (p) { return p.college; }).filter(function (c, i, a) { return c && a.indexOf(c) === i; }).sort();
+      colleges.forEach(function (c) { colSel.add(new Option(c, c)); });
+
+      function drawTabs() {
+        tabs.innerHTML = KEYS.map(function (k) {
+          var n = k === "all" ? list.length : list.filter(function (p) { return p.status === k; }).length;
+          return '<button class="tab" type="button" role="tab" data-status="' + k + '" aria-selected="' + (k === current) + '"><b>' + (k === "all" ? "All" : P.STATUS[k].label) + '</b><span>' + n + '</span></button>';
+        }).join("");
+      }
+      function options(sel) {
+        return KEYS.slice(1).map(function (k) { return '<option value="' + k + '"' + (k === sel ? " selected" : "") + '>' + P.STATUS[k].label + '</option>'; }).join("");
+      }
+      function row(p) {
+        return '<div class="req-row a-row pm-row" role="row" data-id="' + p.id + '">' +
+          '<button class="req-row__doc link-btn" role="cell" type="button" data-open="' + p.id + '">' + esc(p.title) + '</button>' +
+          '<span role="cell" class="a-cell"><span class="m-label">Faculty: </span>' + esc(p.faculty) + '</span>' +
+          '<span role="cell" class="a-cell"><span class="m-label">College: </span>' + esc(p.college) + '</span>' +
+          '<span role="cell">' + P.pill(p.status) + '</span>' +
+          '<span role="cell"><span class="select select--sm"><label class="visually-hidden" for="st-' + p.id + '">Update status</label><select id="st-' + p.id + '" data-status-for="' + p.id + '">' + options(p.status) + '</select></span></span></div>';
+      }
+      function render() {
+        var term = q.value.trim().toLowerCase(), col = colSel.value;
+        var rows = list.filter(function (p) {
+          return (current === "all" || p.status === current) && (!col || p.college === col) &&
+            (!term || (p.title + " " + p.faculty).toLowerCase().indexOf(term) > -1);
+        });
+        document.getElementById("rows").innerHTML = rows.length ? rows.map(row).join("") : '<p class="prop-empty">No proposals match.</p>';
+        ARCH_ICONS.hydrate();
+      }
+      function refresh() { load(); drawTabs(); render(); }
+
+      tabs.addEventListener("click", function (e) {
+        var t = e.target.closest(".tab"); if (!t) return;
+        current = t.dataset.status;
+        tabs.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", x === t); });
+        render();
+      });
+      q.addEventListener("input", render);
+      colSel.addEventListener("change", render);
+
+      // Update status
+      document.getElementById("rows").addEventListener("change", function (e) {
+        var sel = e.target.closest("[data-status-for]"); if (!sel) return;
+        var p = P.get(sel.dataset.statusFor), to = sel.value;
+        if (to === "declined") {
+          A.commentsModal({
+            title: "Decline proposal", doc: p.title,
+            desc: p.faculty + " will see these comments on the proposal and may revise and resubmit it.",
+            submitLabel: "Decline with comments", submitIcon: "x",
+            onSubmit: function (items) { P.setStatus(p.id, "declined", items); refresh(); P.toast("Proposal declined. " + p.faculty + " can now see your comments."); }
+          });
+          // If the pop-up is closed without saving, put the dropdown back
+          var m = document.getElementById("admin-modal");
+          m.querySelectorAll("[data-close]").forEach(function (b) { b.addEventListener("click", function () { sel.value = p.status; }); });
+          document.addEventListener("keydown", function esc(ev) { if (ev.key === "Escape") { sel.value = p.status; document.removeEventListener("keydown", esc); } });
+          return;
+        }
+        P.setStatus(p.id, to);
+        refresh();
+        P.toast("Status updated to “" + P.STATUS[to].label + ".” " + p.faculty + " will see it on their proposal page.");
+      });
+
+      // Proposal details pop-up (the Figma has no separate URO proposal page)
+      document.getElementById("rows").addEventListener("click", function (e) {
+        var b = e.target.closest("[data-open]"); if (!b) return;
+        var p = P.get(b.dataset.open);
+        var rows = [["Faculty", p.faculty], ["College", p.college], ["Research type", p.type], ["Submitted", p.submitted], ["PDF file", ""]];
+        if (p.abstract) rows.push(["Short abstract", p.abstract]);
+        A.modal({
+          title: p.title, submitLabel: "Close",
+          body: '<p>' + P.pill(p.status) + '</p><dl class="mini-dl">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + (r[0] === "PDF file" ? ARCH_PDF.fileCell(p.file, p.fileKey, p.title) : esc(r[1])) + '</dd></div>'; }).join("") + '</dl>' +
+            '<h3 class="mini-h">History</h3><div class="mini-hist">' + p.history.map(function (h) {
+              return '<p><span class="history__dot" style="background:' + P.STATUS[h[0]].fg + '"></span><b>' + P.STATUS[h[0]].label + '</b> · ' + esc(h[1]) + (h[2] ? " · " + esc(h[2] === "You" ? p.faculty : h[2]) : "") + '</p>';
+            }).join("") + '</div>',
+          onSubmit: function () { return true; }
+        });
+        var m = document.getElementById("admin-modal");
+        m.querySelector(".modal__actions [data-close]").remove();
+      });
+
+      drawTabs(); render();
+    })();
+  </script>
+</body>
+</html>

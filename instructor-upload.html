@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Submit Completed Research</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["instructor"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="instructor-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="instructor-catalog.html">Browse Repository</a>
+        <a href="instructor-dashboard.html">Dashboard</a>
+        <a href="instructor-upload.html" aria-current="page">Submit Completed Research</a>
+        <a href="instructor-submissions.html">My Submissions</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <form class="container fac-page" id="upload-form" novalidate>
+      <nav class="breadcrumb" aria-label="Breadcrumb" id="edit-crumb" hidden>
+        <a href="instructor-submissions.html">My Submissions</a>
+        <img src="assets/icon-right-muted.svg" width="16" height="16" alt="">
+        <a id="edit-crumb-link" href="#">Submission details</a>
+        <img src="assets/icon-right-muted.svg" width="16" height="16" alt="">
+        <span aria-current="page">Edit and resubmit</span>
+      </nav>
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title" id="page-title">Upload New Document</h1>
+          <p class="page-sub" id="page-sub">Add your PDF and describe it. A URO reviewer will check it before it appears in search.</p>
+        </div>
+      </div>
+
+      <section class="card form-card" aria-labelledby="step1">
+        <h2 class="section-title" id="step1">Step 1 · Choose your PDF</h2>
+        <div class="dropzone" id="dropzone">
+          <span class="dropzone__icon"><i class="ic" data-icon="upload"></i></span>
+          <p class="dropzone__title">Drag and drop your PDF here</p>
+          <p class="dropzone__or">or</p>
+          <label class="btn btn--outline-maroon" for="pdf">Browse files</label>
+          <input class="visually-hidden" type="file" id="pdf" accept="application/pdf,.pdf">
+          <p class="dropzone__hint">PDF files only, up to 25 MB</p>
+        </div>
+        <p class="field__error" id="pdf-error"></p>
+        <div class="added-file" id="added-file" hidden>
+          <i class="ic" data-icon="fileLg"></i>
+          <div class="added-file__text">
+            <p class="added-file__name" id="file-name"></p>
+            <p class="added-file__meta" id="file-meta"></p>
+          </div>
+          <button class="text-link" type="button" id="remove-file">Remove</button>
+        </div>
+      </section>
+
+      <section class="card form-card form-card--details" aria-labelledby="step2">
+        <div class="form-card__head">
+          <h2 class="section-title" id="step2">Step 2 · Describe the document</h2>
+          <p class="form-card__note">Fields marked with * are required. Plain-language names are shown first; the standard metadata term is in brackets.</p>
+        </div>
+
+        <div class="field" data-field="title">
+          <label for="f-title">Title *</label>
+          <input class="input" id="f-title" name="title" type="text" placeholder="Full title of the document" required>
+          <p class="field__error"></p>
+        </div>
+
+        <div class="field-row">
+          <div class="field" data-field="creator">
+            <label for="f-creator">Author (Creator) *</label>
+            <input class="input" id="f-creator" name="creator" type="text" placeholder="Last name, First name" required aria-describedby="h-creator">
+            <p class="field__help" id="h-creator">For several authors, separate names with a semicolon (;).</p>
+            <p class="field__error"></p>
+          </div>
+          <div class="field" data-field="subject">
+            <label for="f-subject">Keywords (Subject)</label>
+            <input class="input" id="f-subject" name="subject" type="text" placeholder="e.g. enrollment, analytics, dashboard" aria-describedby="h-subject">
+            <p class="field__help" id="h-subject">Words that describe the topic, separated by commas.</p>
+          </div>
+        </div>
+
+        <div class="field" data-field="abstract">
+          <label for="f-abstract">Abstract *</label>
+          <textarea class="input" id="f-abstract" name="abstract" placeholder="Write a short summary of what this document is about." required></textarea>
+          <p class="field__error"></p>
+        </div>
+
+        <div class="field-row">
+          <div class="field" data-field="type">
+            <label for="f-type">Document type *</label>
+            <span class="select"><select id="f-type" name="type" required>
+              <option value="" selected disabled hidden>Choose a type</option>
+            </select></span>
+            <p class="field__error"></p>
+          </div>
+          <div class="field" data-field="department">
+            <label for="f-dept">Department *</label>
+            <span class="select"><select id="f-dept" name="department" required>
+              <option value="" selected disabled hidden>Choose a department</option>
+            </select></span>
+            <p class="field__error"></p>
+          </div>
+        </div>
+      </section>
+
+      <div class="form-actions form-actions--end">
+        <div class="form-actions__btns">
+          <button class="btn btn--outline-maroon" type="button" id="save-draft">Save as draft</button>
+          <button class="btn btn--maroon" type="submit" id="submit-btn"><i class="ic" data-icon="send"></i><span id="submit-label">Submit for review</span></button>
+        </div>
+      </div>
+    </form>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var S = ARCH_SUBMISSIONS, DRAFT = "arch.uploadDraft";
+      var form = document.getElementById("upload-form");
+      var input = document.getElementById("pdf"), zone = document.getElementById("dropzone");
+      var added = document.getElementById("added-file"), pdfErr = document.getElementById("pdf-error");
+      var chosen = null; // { name, size } or { label } for the PDF already on file
+
+      // Options: instructors only submit Theses and Capstone Projects; departments are grouped by college
+      var typeSel = form.elements.type, deptSel = form.elements.department;
+      S.TYPES.forEach(function (t) { typeSel.add(new Option(t, t)); });
+      Object.keys(S.COLLEGES).forEach(function (c) {
+        var g = document.createElement("optgroup"); g.label = c;
+        S.COLLEGES[c].forEach(function (d) { g.appendChild(new Option(d, d)); });
+        deptSel.appendChild(g);
+      });
+
+      function mb(b) { return (b / 1048576).toFixed(1) + " MB"; }
+      function showFile(name, meta) {
+        document.getElementById("file-name").textContent = name;
+        document.getElementById("file-meta").textContent = meta;
+        added.hidden = false;
+      }
+      function setFile(f) {
+        pdfErr.textContent = ""; zone.classList.remove("is-invalid");
+        if (!f) return;
+        var isPdf = /\.pdf$/i.test(f.name) || f.type === "application/pdf";
+        if (!isPdf) { pdfErr.textContent = "Please choose a PDF file."; zone.classList.add("is-invalid"); return; }
+        if (f.size > ARCH_FILES.MAX) { pdfErr.textContent = "That file is larger than 25 MB. Please upload a smaller PDF."; zone.classList.add("is-invalid"); return; }
+        chosen = { name: f.name, size: f.size, file: f };
+        showFile(f.name, mb(f.size) + " · Ready to submit");
+      }
+      input.addEventListener("change", function () { setFile(input.files[0]); });
+      document.getElementById("remove-file").addEventListener("click", function () { chosen = null; input.value = ""; added.hidden = true; });
+      ["dragenter", "dragover"].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add("is-over"); }); });
+      ["dragleave", "drop"].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove("is-over"); }); });
+      zone.addEventListener("drop", function (e) { if (e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]); });
+
+      form.querySelectorAll("select").forEach(function (s) {
+        function upd() { s.classList.toggle("is-placeholder", !s.value); }
+        s.addEventListener("change", upd); upd();
+      });
+      function fill(d) {
+        Object.keys(d).forEach(function (k) {
+          var el = form.elements[k]; if (!el || d[k] == null) return;
+          el.value = d[k]; el.dispatchEvent(new Event("change"));
+        });
+      }
+
+      // Edit mode: "Edit and resubmit" from a returned submission
+      var editId = new URLSearchParams(location.search).get("edit");
+      var editing = editId && S.get(editId);
+      if (editing && editing.status !== "returned") editing = null;
+      if (editing) {
+        document.title = "ARCH · Edit and resubmit";
+        document.getElementById("edit-crumb").hidden = false;
+        document.getElementById("edit-crumb-link").href = "instructor-submission.html?id=" + editing.id;
+        document.getElementById("page-title").textContent = "Edit and resubmit";
+        document.getElementById("page-sub").textContent = "Update the details the URO reviewer asked about. Keep the current PDF or choose a new one, then resubmit.";
+        document.getElementById("submit-label").textContent = "Resubmit for review";
+        document.getElementById("save-draft").hidden = true;
+        fill({ title: editing.title, creator: editing.creator, subject: editing.subject, abstract: editing.abstract, type: editing.type, department: editing.department });
+        chosen = { label: editing.file, fileKey: editing.fileKey };
+        var parts = editing.file.split(" · ");
+        showFile(parts[0], (parts[1] ? parts[1] + " · " : "") + "Current PDF on file");
+      } else {
+        try { var d = JSON.parse(sessionStorage.getItem(DRAFT) || "null"); if (d) fill(d); } catch (e) {}
+      }
+
+      function values() {
+        return { title: form.title.value.trim(), creator: form.creator.value.trim(), subject: form.subject.value.trim(),
+          abstract: form.abstract.value.trim(), type: typeSel.value, department: deptSel.value };
+      }
+
+      document.getElementById("save-draft").addEventListener("click", function () {
+        try { sessionStorage.setItem(DRAFT, JSON.stringify(values())); } catch (e) {}
+        S.toast("Draft saved. It will stay here until you close this tab.");
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var v = values(), first = null;
+        var required = { title: "Enter the title.", creator: "Enter at least one author.", abstract: "Write a short abstract.", type: "Choose a document type.", department: "Choose a department." };
+        Object.keys(required).forEach(function (k) {
+          var f = form.querySelector('[data-field="' + k + '"]'), bad = !v[k];
+          f.classList.toggle("is-invalid", bad);
+          f.querySelector(".field__error").textContent = bad ? required[k] : "";
+          if (bad && !first) first = f.querySelector("input,select,textarea");
+        });
+        if (!chosen) { pdfErr.textContent = "Choose the PDF of the completed research."; zone.classList.add("is-invalid"); if (!first) zone.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        if (first) { first.focus(); return; }
+        if (!chosen) return;
+
+        var file = chosen.label || (chosen.name + " · " + mb(chosen.size));
+        var data = { title: v.title, creator: v.creator, subject: v.subject, abstract: v.abstract, type: v.type, department: v.department, file: file };
+        var btn = document.getElementById("submit-btn"); btn.disabled = true;
+        document.getElementById("submit-label").textContent = "Saving PDF…";
+        // Keep the real PDF in this browser session (IndexedDB) so URO can open it in review
+        var saved = chosen.file ? ARCH_FILES.put(chosen.file).then(function (key) {
+          data.fileKey = key;
+          return ARCH_PDF.pageCount({ fileKey: key }).then(function (n) { data.pages = n; }, function () {});
+        }) : Promise.resolve();
+        saved.catch(function () { S.toast("The PDF couldn’t be stored in this browser, so only its name was saved."); }).then(function () {
+          if (editing) {
+            if (!chosen.file) { data.fileKey = editing.fileKey; }
+            S.resubmit(editing.id, data);
+            location.href = "instructor-submissions.html?new=" + editing.id + "&re=1";
+          } else {
+            var p = S.add(data);
+            try { sessionStorage.removeItem(DRAFT); } catch (e2) {}
+            location.href = "instructor-submissions.html?new=" + p.id;
+          }
+        });
+      });
+
+      form.querySelectorAll("input,select,textarea").forEach(function (el) {
+        el.addEventListener("input", function () {
+          var f = el.closest(".field"); if (f) { f.classList.remove("is-invalid"); var er = f.querySelector(".field__error"); if (er) er.textContent = ""; }
+        });
+        el.addEventListener("change", function () { el.dispatchEvent(new Event("input")); });
+      });
+    })();
+  </script>
+</body>
+</html>

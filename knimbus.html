@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Holy Angel University</title>
+  <link rel="stylesheet" href="css/portal.css">
+</head>
+<body>
+  <!-- Top bar -->
+  <header class="portal-top">
+    <div class="portal-top__bar">
+      <a class="hau-logo" href="knimbus.html" aria-label="Holy Angel University home">
+        <img src="assets/logo.png" alt="">
+        <span class="hau-logo__text"><b>Holy Angel</b><span>University</span></span>
+      </a>
+
+      <form class="portal-search" role="search" onsubmit="return portalSoon(event)">
+        <label class="portal-search__type"><span class="visually-hidden">Search by</span>
+          <select><option>Title</option><option>Author</option><option>Everything</option></select>
+        </label>
+        <label class="visually-hidden" for="portal-q">Search</label>
+        <input id="portal-q" type="search" placeholder="Search for Titles, Authors, etc">
+        <button type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#9a7f84" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+      </form>
+
+      <a class="btn-outline" href="#" data-soon>Sign in</a>
+    </div>
+
+    <!-- Maroon menu bar: ARCH is the entry point to our system -->
+    <nav class="portal-menu" aria-label="Main">
+      <ul>
+        <li><a class="is-home" href="knimbus.html" aria-label="Home" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="#710e1d"><path d="M12 3 2 11.5h3V21h5.5v-6h3v6H19v-9.5h3z"/></svg></a></li>
+        <li class="has-sub">
+          <button type="button" aria-haspopup="true">About <span class="caret" aria-hidden="true"></span></button>
+          <div class="sub">
+            <a href="#" data-soon>Library Services</a>
+            <a href="#" data-soon>Library Hours</a>
+            <a href="#" data-soon>Contact Us</a>
+          </div>
+        </li>
+        <li><a href="#" data-soon>eCatalog</a></li>
+        <li><a href="#" data-soon>OPAC</a></li>
+        <li><a href="login.html">ARCH</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="portal-banner"><img src="assets/hero-campus.jpg" alt="Holy Angel University main building"></div>
+
+    <!-- Featured books -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section__head--center">
+          <h2 class="section__title">Featured Books</h2>
+          <p class="section__sub section__sub--maroon">Explore our latest and featured titles and collections</p>
+          <div class="tabs tabs--center" role="tablist" data-tabs="featured">
+            <button class="tab" role="tab" aria-selected="true" data-set="new">New Arrivals</button>
+            <button class="tab" role="tab" aria-selected="false" data-set="monthly">Monthly Highlights</button>
+          </div>
+        </div>
+        <div class="carousel" id="featured">
+          <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="carousel__track"></div>
+          <button class="carousel__arrow carousel__arrow--next" type="button" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></button>
+        </div>
+        <p class="center"><a class="link-blue" href="#" data-soon>View All</a></p>
+      </div>
+    </section>
+
+    <!-- Recommended resources -->
+    <section class="section section--pink">
+      <div class="wrap">
+        <h2 class="section__title">Recommended Resources</h2>
+        <p class="section__sub">Quickly Access the recommended resources</p>
+        <div class="tabs tabs--outline" role="tablist" data-tabs="recommended">
+          <button class="tab" role="tab" aria-selected="true" data-set="filipiniana">Filipiniana eBooks</button>
+          <button class="tab" role="tab" aria-selected="false" data-set="fiction">Fiction eBooks</button>
+          <button class="tab" role="tab" aria-selected="false" data-set="nonfiction">Non-Fiction eBooks</button>
+          <button class="tab" role="tab" aria-selected="false" data-set="audio">Audio Books</button>
+        </div>
+        <div class="shelf" id="recommended">
+          <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="m15 5-7 7 7 7"/></svg></button>
+          <div class="shelf__track"></div>
+          <button class="carousel__arrow carousel__arrow--next" type="button" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- A-Z -->
+    <section class="section">
+      <div class="wrap">
+        <h2 class="section__title">A-Z List</h2>
+        <p class="section__sub">A comprehensive directory of your institution's eLibrary subscriptions and curated open-access eContent. Browse by the first unique word in each title.</p>
+        <div class="az" id="az"></div>
+        <a class="btn-blue" href="#" data-soon>A-Z List</a>
+      </div>
+    </section>
+
+    <!-- Cataloged resources -->
+    <section class="section" style="padding-top:0">
+      <div class="wrap">
+        <h2 class="section__title">Cataloged Resources</h2>
+        <p class="section__sub">Discover and access titles and resources from both your subscribed content and curated open-access collections.</p>
+        <div class="tabs" role="tablist" data-tabs="catalogued">
+          <button class="tab" role="tab" aria-selected="true" data-set="subscribed">Subscribed</button>
+          <button class="tab" role="tab" aria-selected="false" data-set="open">Open Access</button>
+        </div>
+        <div class="db-grid" id="databases"></div>
+      </div>
+    </section>
+
+    <!-- Useful links + app -->
+    <section class="section" style="padding-top:0">
+      <div class="wrap">
+        <h2 class="section__title">Useful Links</h2>
+        <a class="useful" href="#" data-soon>
+          <span class="useful__mark">PjP</span>
+          <span><span class="useful__name">Psychological Association of the Philippines</span><br><span class="useful__desc">Psychological Association of the Philippines</span></span>
+        </a>
+
+        <div class="app-banner">
+          <div>
+            <h2>Download our Mobile App</h2>
+            <p>Quick Access to content on the go</p>
+            <div class="qr-row">
+              <div class="qr"><span class="qr__box" aria-hidden="true"></span><span class="store">App Store</span></div>
+              <div class="qr"><span class="qr__box" aria-hidden="true"></span><span class="store">Google Play</span></div>
+            </div>
+          </div>
+          <div class="app-banner__phone" aria-hidden="true">eLibrary</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="portal-footer"><a href="#" data-soon>Terms &amp; Conditions</a></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Placeholder data (titles as listed on the portal; covers are generated, not real artwork).
+    var PALETTE = [["#3b4a6b","#1f2a40"],["#2c8c7a","#135448"],["#e8e1d2","#b9ab8c"],["#2f6fde","#1a44a3"],["#23364f","#101b2b"],["#b8412f","#6f2016"],["#1d1d1d","#444"],["#7a5a2f","#3f2c12"],["#5f7d3a","#2f4219"],["#8a2b4a","#4a1226"]];
+    var FEATURED = {
+      "new": [
+        ["Public Values Leadership","Bozeman, Barry"],["Cleaner logistics and supply chain",""],["Econometrics and Statistics",""],
+        ["Africa, the Cradle of Human Diversity","Cesar Fortes-Lima, Ezekia Mtetwa"],["Migration at Work",""],
+        ["Movements After Revolution","Rodríguez, Miles V."],["Sustainable Technology and Entrepreneurship",""],
+        ["Career and Career Guidance in the Nordic Countries","Erik Hagaseth Haug, Tristram Hooley"],["Unlocking markets to smallholders","Herman D. van Schalkwyk"],["Multimodal Transportation",""]
+      ],
+      "monthly": [
+        ["Research Methods in Education",""],["Philippine History and Culture",""],["Introduction to Data Science",""],
+        ["Nursing Care Fundamentals",""],["Principles of Accounting",""],["Engineering Mechanics",""],["Ethics and Leadership",""]
+      ]
+    };
+    var RECOMMENDED = {
+      filipiniana: [["The Pit of the Serpent","Philippine E-Book Hub","Robert E. Howard"],["Twenty Years in the Philippines","Philippine E-Book Hub","Paul P de La Gironiere"],["Ang Liham ni Dr. Jose Rizal sa mga Kadalagahan sa Malolos, Bulakan","Philippine E-Book Hub","José Rizal"],["El Filibusterismo","Philippine E-Book Hub","José Rizal"],["Ibong Adarna","Philippine E-Book Hub","José de la Cruz"],["Historia dela Provincia del Sancto Rosario","National Library of the Philippines",""],["Florante at Laura","Philippine E-Book Hub","Francisco Balagtas"]],
+      fiction: [["Noli Me Tangere","Philippine E-Book Hub","José Rizal"],["Pride and Prejudice","Open Access","Jane Austen"],["Frankenstein","Open Access","Mary Shelley"],["The Time Machine","Open Access","H. G. Wells"],["Dracula","Open Access","Bram Stoker"],["Little Women","Open Access","Louisa May Alcott"]],
+      nonfiction: [["The Philippine Islands","Open Access","John Foreman"],["Walden","Open Access","Henry David Thoreau"],["The Art of War","Open Access","Sun Tzu"],["Meditations","Open Access","Marcus Aurelius"],["On the Origin of Species","Open Access","Charles Darwin"],["Common Sense","Open Access","Thomas Paine"]],
+      audio: [["El Filibusterismo (Audio)","Philippine E-Book Hub","José Rizal"],["Ibong Adarna (Audio)","Philippine E-Book Hub","José de la Cruz"],["Florante at Laura (Audio)","Philippine E-Book Hub","Francisco Balagtas"],["Noli Me Tangere (Audio)","Philippine E-Book Hub","José Rizal"],["Urbana at Feliza (Audio)","Philippine E-Book Hub","Modesto de Castro"]]
+    };
+    var DATABASES = {
+      subscribed: ["Access Engineering – McGraw Hill","Digital Media Learning","Emerald","Encyclopedia Britannica","Gale"],
+      open: ["DOAJ","PubMed Central","arXiv","Project Gutenberg","OpenStax"]
+    };
+
+    function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+    function cover(title, by, i){
+      var p = PALETTE[i % PALETTE.length];
+      var dark = i % PALETTE.length === 2;
+      return '<div class="cover" style="--c1:'+p[0]+';--c2:'+p[1]+(dark?';color:#2b2927':'')+'"><span class="cover__title">'+esc(title)+'</span>'+(by?'<span class="cover__by">'+esc(by)+'</span>':'')+'</div>';
+    }
+
+    // Featured: coverflow-style carousel, centre book is enlarged.
+    (function(){
+      var root = document.getElementById('featured'), track = root.querySelector('.carousel__track');
+      var set = 'new', start = 0;
+      function render(){
+        var list = FEATURED[set], n = list.length, html = '';
+        for (var k = -3; k <= 3; k++) {
+          var idx = ((start + k) % n + n) % n, b = list[idx];
+          html += '<a class="book" href="#" data-soon data-pos="'+k+'">'+cover(b[0], b[1], idx)+'<p class="book__title">'+esc(b[0])+'</p>'+(b[1]?'<p class="book__author">'+esc(b[1])+'</p>':'')+'</a>';
+        }
+        track.innerHTML = html;
+      }
+      root.querySelector('.carousel__arrow--prev').onclick = function(){ start--; render(); };
+      root.querySelector('.carousel__arrow--next').onclick = function(){ start++; render(); };
+      tabs('featured', function(s){ set = s; start = 3; render(); });
+      start = 3; render();
+    })();
+
+    // Recommended: scrolling shelf.
+    (function(){
+      var root = document.getElementById('recommended'), track = root.querySelector('.shelf__track');
+      function render(s){
+        track.innerHTML = RECOMMENDED[s].map(function(b, i){
+          return '<a class="res-card" href="#" data-soon>'+cover(b[0], '', i + 3)+'<div class="res-card__body"><p class="res-card__title">'+esc(b[0])+'</p><p class="res-card__src">'+esc(b[1])+'</p>'+(b[2]?'<p class="res-card__author">'+esc(b[2])+'</p>':'')+'</div></a>';
+        }).join('');
+        track.scrollLeft = 0;
+      }
+      root.querySelector('.carousel__arrow--prev').onclick = function(){ track.scrollLeft -= track.clientWidth * .8; };
+      root.querySelector('.carousel__arrow--next').onclick = function(){ track.scrollLeft += track.clientWidth * .8; };
+      tabs('recommended', render);
+      render('filipiniana');
+    })();
+
+    // A-Z letters
+    document.getElementById('az').innerHTML = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(function(l){ return '<a href="#" data-soon>'+l+'</a>'; }).join('');
+
+    // Cataloged resources
+    (function(){
+      var grid = document.getElementById('databases');
+      function render(s){
+        grid.innerHTML = DATABASES[s].map(function(d){
+          return '<a class="db-tile" href="#" data-soon><span class="db-tile__logo">'+esc(d.split(' – ')[0])+'</span>'+esc(d)+'</a>';
+        }).join('') + '<a class="db-tile db-tile--more" href="#" data-soon><span class="db-tile__logo"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8m-3-3 3 3-3 3"/></svg></span><u>View all</u></a>';
+      }
+      tabs('catalogued', render);
+      render('subscribed');
+    })();
+
+    // Shared tab behaviour
+    function tabs(name, onChange){
+      var group = document.querySelector('[data-tabs="'+name+'"]');
+      group.addEventListener('click', function(e){
+        var t = e.target.closest('.tab'); if (!t) return;
+        group.querySelectorAll('.tab').forEach(function(x){ x.setAttribute('aria-selected', x === t); });
+        onChange(t.dataset.set);
+      });
+    }
+
+    // Links outside the ARCH prototype just show a note.
+    var toast = document.getElementById('toast'), timer;
+    function portalSoon(e){
+      if (e) e.preventDefault();
+      toast.textContent = 'Not part of the ARCH prototype. Use the ARCH link in the menu bar.';
+      toast.classList.add('is-on'); clearTimeout(timer);
+      timer = setTimeout(function(){ toast.classList.remove('is-on'); }, 2200);
+      return false;
+    }
+    document.addEventListener('click', function(e){ if (e.target.closest('[data-soon]')) portalSoon(e); });
+  </script>
+</body>
+</html>

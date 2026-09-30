@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Employee view</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard("employee");</script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="employee.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="container requests-page" style="justify-content:center;align-items:center;text-align:center">
+      <span class="icon-circle" style="width:72px;height:72px;border-radius:36px"><img src="assets/icon-lock.svg" width="30" height="30" alt=""></span>
+      <h1 class="page-title">Employee view – coming soon</h1>
+      <p class="page-sub" style="max-width:560px">You're signed in as <strong data-user-email></strong>. The employee screens (admin, faculty and instructor) will be added here next.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+</body>
+</html>

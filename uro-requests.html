@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · View Request Queue</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["uro"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="uro-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav main-nav--6" aria-label="Main">
+        <a href="uro-catalog.html">Browse Repository</a>
+        <a href="uro-dashboard.html">Dashboard</a>
+        <a href="uro-review.html">Research Review</a>
+        <a href="uro-proposals.html">Proposals</a>
+        <a href="uro-requests.html" aria-current="page">View Requests</a>
+        <a href="uro-users.html">Users</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container fac-page fac-page--tight">
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title">View Request Queue</h1>
+          <p class="page-sub">Full-document access requests from students and the HAU community.</p>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Filter by status" id="tabs"></div>
+
+      <div class="card req-table" role="table" aria-label="View requests">
+        <div class="req-row req-row--head a-row vr-row" role="row">
+          <span role="columnheader">Document requested</span><span role="columnheader">Requested by</span><span role="columnheader">Requested on</span><span role="columnheader">Status</span><span role="columnheader"><span class="visually-hidden">Action</span></span>
+        </div>
+        <div id="rows"></div>
+      </div>
+
+      <p class="info-bar"><i class="ic" data-icon="info"></i>Approving a request gives that person time-limited, in-browser access to the full document. The abstract and metadata remain visible to everyone.</p>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var R = ARCH_REQUESTS, A = ARCH_ADMIN, esc = A.esc, toast = ARCH_PROPOSALS.toast;
+      var current = new URLSearchParams(location.search).get("status") || "pending";
+      var TABS = [["pending", "Pending"], ["approved", "Approved"], ["denied", "Denied"], ["all", "All"]];
+      var PILL = {
+        pending: '<span class="status" style="background:#fbecc9;color:#7a4b00"><i class="ic" data-icon="clock" style="width:16px;height:16px"></i>Pending</span>',
+        approved: '<span class="status" style="background:#e1f2e5;color:#1f6136"><i class="ic" data-icon="checkc" style="width:16px;height:16px"></i>Approved</span>',
+        denied: '<span class="status" style="background:#fbe3e3;color:#9b2226"><i class="ic" data-icon="x" style="width:16px;height:16px"></i>Denied</span>'
+      };
+      var list, tabs = document.getElementById("tabs");
+      function load() { list = R.everything(); }
+      function drawTabs() {
+        tabs.innerHTML = TABS.map(function (t) {
+          var n = t[0] === "all" ? list.length : list.filter(function (r) { return r.status === t[0]; }).length;
+          return '<button class="tab" type="button" role="tab" data-status="' + t[0] + '" aria-selected="' + (t[0] === current) + '"><b>' + t[1] + '</b><span>' + n + '</span></button>';
+        }).join("");
+      }
+      function who(r) { return esc(r.by) + (r.byLabel ? " (" + esc(r.byLabel) + ")" : ""); }
+      function row(r) {
+        var act = r.status === "pending"
+          ? '<span class="vr-actions"><button class="btn-mini btn-mini--ok" type="button" data-approve="' + r.id + '"><i class="ic" data-icon="check"></i>Approve</button>' +
+            '<button class="btn-mini btn-mini--no" type="button" data-deny="' + r.id + '"><i class="ic" data-icon="x"></i>Deny</button></span>'
+          : '<button class="link-arrow" type="button" data-view="' + r.id + '">View <i class="ic" data-icon="right" style="width:18px;height:18px"></i></button>';
+        return '<div class="req-row a-row vr-row" role="row">' +
+          '<a class="req-row__doc" role="cell" href="detail.html?doc=' + encodeURIComponent(r.docId) + '">' + esc(r.title) + '</a>' +
+          '<span role="cell" class="a-cell"><span class="m-label">By </span>' + who(r) + '</span>' +
+          '<span role="cell" class="a-cell"><span class="m-label">Requested </span>' + esc(r.date) + '</span>' +
+          '<span role="cell">' + PILL[r.status] + '</span>' +
+          '<span role="cell">' + act + '</span></div>';
+      }
+      function render() {
+        var rows = list.filter(function (r) { return current === "all" || r.status === current; });
+        document.getElementById("rows").innerHTML = rows.length ? rows.map(row).join("") : '<p class="prop-empty">No ' + (current === "all" ? "" : current + " ") + 'requests.</p>';
+        ARCH_ICONS.hydrate();
+      }
+      function refresh() { load(); drawTabs(); render(); }
+      function find(id) { return list.filter(function (r) { return r.id === id; })[0]; }
+
+      tabs.addEventListener("click", function (e) {
+        var t = e.target.closest(".tab"); if (!t) return;
+        current = t.dataset.status;
+        tabs.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", x === t); });
+        render();
+      });
+
+      document.getElementById("rows").addEventListener("click", function (e) {
+        var ok = e.target.closest("[data-approve]"), no = e.target.closest("[data-deny]"), view = e.target.closest("[data-view]");
+        if (ok) {
+          var r = find(ok.dataset.approve);
+          R.decide(r.id, "approved"); refresh();
+          toast("Approved. " + r.by + " can now read the full document.");
+        }
+        if (no) {
+          var d = find(no.dataset.deny);
+          A.modal({
+            title: "Deny view request", doc: d.title,
+            desc: "Requested by " + d.by + (d.byLabel ? " (" + d.byLabel + ")" : "") + " on " + d.date + ". They will see your reason in My View Requests.",
+            body: '<div class="field" data-field="reason"><label for="deny-reason">Reason *</label><textarea class="input" id="deny-reason" rows="3" placeholder="e.g. Please submit the request again from your HAU email."></textarea><p class="field__error"></p></div>',
+            submitLabel: "Deny request", submitIcon: "x",
+            onSubmit: function (form) {
+              var t = form.querySelector("#deny-reason"), v = t.value.trim();
+              if (!v) { form.querySelector(".field__error").textContent = "Give a short reason."; t.focus(); return false; }
+              R.decide(d.id, "denied", v); refresh(); toast("Request denied. " + d.by + " will see your reason.");
+              return true;
+            }
+          });
+        }
+        if (view) {
+          var v = find(view.dataset.view);
+          var rows = [["Requested by", v.by + (v.byLabel ? " (" + v.byLabel + ")" : "")], ["Requested on", v.date], ["Decided on", v.decided || "—"]];
+          if (v.purpose) rows.splice(2, 0, ["Purpose", v.purpose]);
+          if (v.note) rows.splice(3, 0, ["Note", v.note]);
+          if (v.status === "denied") rows.push(["Reason given", v.reason || "—"]);
+          A.modal({
+            title: v.title, submitLabel: "Close",
+            body: '<p>' + PILL[v.status] + '</p><dl class="mini-dl">' + rows.map(function (x) { return '<div><dt>' + x[0] + '</dt><dd>' + esc(x[1]) + '</dd></div>'; }).join("") + '</dl>',
+            onSubmit: function () { return true; }
+          });
+          document.querySelector("#admin-modal .modal__actions [data-close]").remove();
+        }
+      });
+      refresh();
+    })();
+  </script>
+</body>
+</html>

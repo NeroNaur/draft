@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Research Review</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["uro"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="uro-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav main-nav--6" aria-label="Main">
+        <a href="uro-catalog.html">Browse Repository</a>
+        <a href="uro-dashboard.html">Dashboard</a>
+        <a href="uro-review.html" aria-current="page">Research Review</a>
+        <a href="uro-proposals.html">Proposals</a>
+        <a href="uro-requests.html">View Requests</a>
+        <a href="uro-users.html">Users</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container fac-page fac-page--tight">
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title">Research Review</h1>
+          <p class="page-sub">Completed research sent in by authorized uploaders. Check each one before it appears in search.</p>
+        </div>
+      </div>
+
+      <p class="notice-ok" id="done-ok" hidden><i class="ic" data-icon="checkc"></i><span id="done-text"></span></p>
+
+      <label class="search-field">
+        <i class="ic" data-icon="search"></i>
+        <span class="visually-hidden">Search submissions</span>
+        <input type="search" id="q" placeholder="Search by title, author or uploader">
+      </label>
+
+      <div class="tabs" role="tablist" aria-label="Filter by status" id="tabs"></div>
+
+      <div class="card req-table" role="table" aria-label="Completed research submissions">
+        <div class="req-row req-row--head a-row rv-row" role="row">
+          <span role="columnheader">Document</span><span role="columnheader">Uploaded by</span><span role="columnheader">Type</span><span role="columnheader">Date submitted</span><span role="columnheader">Status</span><span role="columnheader"><span class="visually-hidden">Action</span></span>
+        </div>
+        <div id="rows"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var S = ARCH_SUBMISSIONS, A = ARCH_ADMIN, esc = A.esc;
+      var list = S.everything().sort(A.byNewest);
+      var params = new URLSearchParams(location.search);
+      var current = params.get("status") || "waiting";
+
+      if (params.get("done")) {
+        var d = S.get(params.get("done"));
+        if (d) {
+          document.getElementById("done-ok").hidden = false;
+          document.getElementById("done-text").textContent = d.status === "approved"
+            ? "“" + d.title + "” was approved. It is now searchable in the repository."
+            : "“" + d.title + "” was returned to " + d.uploader + " with your comments.";
+        }
+      }
+
+      var TABS = [["waiting", "Waiting"], ["submitted", "Submitted"], ["review", "Under Review"], ["returned", "Returned for Revision"], ["approved", "Approved"], ["archived", "Archived"], ["all", "All"]];
+      function match(p, k) { return k === "all" || (k === "waiting" ? (p.status === "submitted" || p.status === "review") : p.status === k); }
+      var tabs = document.getElementById("tabs");
+      tabs.innerHTML = TABS.map(function (t) {
+        var n = list.filter(function (p) { return match(p, t[0]); }).length;
+        return '<button class="tab" type="button" role="tab" data-status="' + t[0] + '" aria-selected="' + (t[0] === current) + '"><b>' + t[1] + '</b><span>' + n + '</span></button>';
+      }).join("");
+
+      var q = document.getElementById("q");
+      function row(p) {
+        var href = "uro-review-detail.html?id=" + p.id, waiting = p.status === "submitted" || p.status === "review";
+        return '<div class="req-row a-row rv-row" role="row">' +
+          '<a class="req-row__doc" role="cell" href="' + href + '">' + esc(p.title) + '</a>' +
+          '<span role="cell" class="a-cell"><span class="m-label">Uploaded by: </span>' + esc(p.uploader) + '<small>' + esc(p.uploaderRole || "") + '</small></span>' +
+          '<span role="cell" class="a-cell"><span class="m-label">Type: </span>' + esc(p.type) + '</span>' +
+          '<span role="cell" class="a-cell"><span class="m-label">Submitted </span>' + esc(p.submitted) + '</span>' +
+          '<span role="cell">' + S.pill(p.status) + '</span>' +
+          '<span role="cell"><a class="link-arrow" href="' + href + '">' + (waiting ? "Review" : "View") + ' <i class="ic" data-icon="right" style="width:18px;height:18px"></i></a></span></div>';
+      }
+      function render() {
+        var term = q.value.trim().toLowerCase();
+        var rows = list.filter(function (p) {
+          return match(p, current) && (!term || (p.title + " " + (p.creator || "") + " " + (p.uploader || "")).toLowerCase().indexOf(term) > -1);
+        });
+        document.getElementById("rows").innerHTML = rows.length ? rows.map(row).join("") : '<p class="prop-empty">Nothing here right now.</p>';
+        ARCH_ICONS.hydrate();
+      }
+      tabs.addEventListener("click", function (e) {
+        var t = e.target.closest(".tab"); if (!t) return;
+        current = t.dataset.status;
+        tabs.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", x === t); });
+        render();
+      });
+      q.addEventListener("input", render);
+      render();
+    })();
+  </script>
+</body>
+</html>

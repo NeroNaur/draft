@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login · ARCH</title>
+  <link rel="stylesheet" href="css/portal.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+</head>
+<body class="login-page">
+  <div class="login-col">
+    <main class="login-card">
+      <a class="hau-logo" href="knimbus.html" aria-label="Back to Holy Angel University portal">
+        <img src="assets/logo.png" alt="">
+        <span class="hau-logo__text"><b>Holy Angel</b><span>University</span></span>
+      </a>
+      <h1>Login</h1>
+      <p class="login-card__sub">Continue to your account</p>
+
+      <p class="signed-as" id="signed-as" hidden></p>
+      <form class="login-form" id="login-form" novalidate>
+        <div class="float" id="email-field">
+          <input id="email" name="email" type="email" autocomplete="username" placeholder=" " required>
+          <label for="email">Email<i>*</i></label>
+        </div>
+        <div class="float" id="password-field">
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder=" " required>
+          <label for="password">Password<i>*</i></label>
+          <button class="eye" type="button" id="toggle-pw" aria-label="Show password" aria-pressed="false">
+            <svg viewBox="0 0 16 16" fill="#212529"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M8 11.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7"/><circle cx="8" cy="8" r="2"/></svg>
+          </button>
+        </div>
+        <div class="login-links"><a href="#" onclick="return false">Forgot password?</a></div>
+        <p class="login-error" id="login-error" role="alert"></p>
+        <button class="btn-continue" type="submit" id="continue" disabled>Continue</button>
+      </form>
+
+      <p class="login-foot">Don't have an account?<a href="#" onclick="return false">Request for sign up</a></p>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      // Already signed in this tab? Go straight to that account's home.
+      // Already signed in? Offer to continue, but allow signing in as someone else.
+      var existing = ARCH.current();
+      if (existing && ARCH.home[existing.kind]) {
+        var sa = document.getElementById("signed-as");
+        sa.innerHTML = "Signed in as <b></b>. <a></a>";
+        sa.querySelector("b").textContent = existing.name;
+        sa.querySelector("a").textContent = "Continue \u2192";
+        sa.querySelector("a").href = ARCH.home[existing.kind];
+        sa.hidden = false;
+      }
+
+      var form = document.getElementById('login-form');
+      var email = document.getElementById('email');
+      var pw = document.getElementById('password');
+      var btn = document.getElementById('continue');
+      var err = document.getElementById('login-error');
+      var ef = document.getElementById('email-field'), pf = document.getElementById('password-field');
+
+      function update() {
+        btn.disabled = !(email.value.trim() && pw.value);
+        err.textContent = '';
+        ef.classList.remove('is-invalid'); pf.classList.remove('is-invalid');
+      }
+      email.addEventListener('input', update);
+      pw.addEventListener('input', update);
+
+      document.getElementById('toggle-pw').addEventListener('click', function () {
+        var show = pw.type === 'password';
+        pw.type = show ? 'text' : 'password';
+        this.setAttribute('aria-pressed', show);
+        this.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var r = ARCH.login(email.value, pw.value);
+        if (!r.ok) {
+          err.textContent = r.message;
+          (r.field === 'email' ? ef : pf).classList.add('is-invalid');
+          (r.field === 'email' ? email : pw).focus();
+          return;
+        }
+        location.href = r.redirect;
+      });
+      update();
+    })();
+  </script>
+</body>
+</html>

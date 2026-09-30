@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Admin Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["uro"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="uro-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav main-nav--6" aria-label="Main">
+        <a href="uro-catalog.html">Browse Repository</a>
+        <a href="uro-dashboard.html" aria-current="page">Dashboard</a>
+        <a href="uro-review.html">Research Review</a>
+        <a href="uro-proposals.html">Proposals</a>
+        <a href="uro-requests.html">View Requests</a>
+        <a href="uro-users.html">Users</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container fac-page">
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title">Admin Dashboard</h1>
+          <p class="page-sub">A quick look at what needs the University Research Office today.</p>
+        </div>
+      </div>
+
+      <div class="kpis" id="kpis" aria-label="At a glance"></div>
+
+      <div class="dash-cols">
+        <section class="card chart-card" aria-labelledby="chart-title">
+          <h2 class="card-title card-title--lg" id="chart-title">Submissions vs. Knimbus-posted</h2>
+          <div class="bars" id="bars"></div>
+          <div class="breakdown">
+            <h3 class="breakdown__title">Proposal status breakdown</h3>
+            <div class="breakdown__chips" id="breakdown"></div>
+          </div>
+        </section>
+
+        <aside class="side-col">
+          <section class="card attn-card" aria-labelledby="attn-title">
+            <div class="attn-card__head">
+              <h2 class="card-title" id="attn-title">Needs attention</h2>
+              <a class="link-arrow" href="uro-review.html">See all <i class="ic" data-icon="right" style="width:18px;height:18px"></i></a>
+            </div>
+            <div id="attn"></div>
+          </section>
+          <section class="card shortcuts" aria-labelledby="sc-title">
+            <h2 class="card-title" id="sc-title">Shortcuts</h2>
+            <a class="shortcut" href="uro-review.html"><i class="ic" data-icon="file"></i><span>Review completed research</span><i class="ic shortcut__go" data-icon="right"></i></a>
+            <a class="shortcut" href="uro-proposals.html"><i class="ic" data-icon="edit"></i><span>Update proposal statuses</span><i class="ic shortcut__go" data-icon="right"></i></a>
+            <a class="shortcut" href="uro-requests.html"><i class="ic" data-icon="eye"></i><span>Approve or deny view requests</span><i class="ic shortcut__go" data-icon="right"></i></a>
+            <a class="shortcut" href="uro-users.html"><i class="ic" data-icon="users"></i><span>Manage users and roles</span><i class="ic shortcut__go" data-icon="right"></i></a>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var P = ARCH_PROPOSALS, S = ARCH_SUBMISSIONS, R = ARCH_REQUESTS, A = ARCH_ADMIN, esc = A.esc;
+      var props = P.everything(), subs = S.everything(), reqs = R.everything();
+
+      var inProgress = props.filter(function (p) { return p.status !== "approved" && p.status !== "declined"; });
+      var waiting = subs.filter(function (p) { return p.status === "submitted" || p.status === "review"; });
+      var pending = reqs.filter(function (r) { return r.status === "pending"; });
+      // Repository total: the Figma's 842, which already counts the 2 approved/archived sample submissions
+      var inRepo = 840 + subs.filter(function (p) { return p.status === "approved" || p.status === "archived"; }).length;
+
+      function kpi(href, icon, label, n, note, hl) {
+        return '<a class="card kpi' + (hl ? " kpi--hl" : "") + '" href="' + href + '"><span class="kpi__head"><i class="ic" data-icon="' + icon + '"></i>' + label +
+          '</span><span class="kpi__num">' + n.toLocaleString("en-US") + '</span><span class="kpi__note">' + note + '</span></a>';
+      }
+      document.getElementById("kpis").innerHTML =
+        kpi("uro-proposals.html", "file", "Proposals in progress", inProgress.length, "Across all review stages") +
+        kpi("uro-review.html", "clock", "Completed research waiting", waiting.length, "Newest first in the queue", waiting.length > 0) +
+        kpi("uro-requests.html", "eye", "View requests pending", pending.length, "Waiting for a decision") +
+        kpi("uro-catalog.html", "database", "Documents in repository", inRepo, "Approved and archived");
+
+      // Bars (sample analytics from the Figma; the repository total follows the card above)
+      var bars = [["URO Staff submissions", 312, "#710e1d"], ["Instructor/Coordinator submissions", 268, "#c9962e"],
+        ["Pushed to Knimbus (approved)", inRepo, "#1f6136"], ["Declined (HAU-only)", 58, "#8a8178"]];
+      var max = Math.max.apply(null, bars.map(function (b) { return b[1]; }));
+      document.getElementById("bars").innerHTML = bars.map(function (b) {
+        return '<div class="bar"><p class="bar__label">' + b[0] + ' <span aria-hidden="true">·</span> <b>' + b[1] + '</b></p>' +
+          '<div class="bar__track" role="img" aria-label="' + b[0] + ': ' + b[1] + '"><span style="width:' + (b[1] / max * 100).toFixed(1) + '%;background:' + b[2] + '"></span></div></div>';
+      }).join("");
+
+      // Proposal status chips
+      document.getElementById("breakdown").innerHTML = ["submitted", "review", "turnitin", "peer", "irb", "approved", "declined"].map(function (k) {
+        var st = P.STATUS[k], n = props.filter(function (p) { return p.status === k; }).length;
+        return '<a class="chip-stat" href="uro-proposals.html?status=' + k + '" style="background:' + st.bg + ';color:' + st.fg + '">' + st.label + ' <span>' + n + '</span></a>';
+      }).join("");
+
+      // Needs attention
+      function oldest(list, dateOf) {
+        if (!list.length) return "";
+        var d = Math.max.apply(null, list.map(function (x) { return A.daysSince(dateOf(x)); }));
+        return "Oldest: " + d + (d === 1 ? " day" : " days");
+      }
+      var peer = props.filter(function (p) { return p.status === "peer"; });
+      var items = [
+        ["file", waiting.length + (waiting.length === 1 ? " completed research submission waiting" : " completed research submissions waiting"), oldest(waiting, function (p) { return p.submitted; }), "uro-review.html"],
+        ["eye", pending.length + (pending.length === 1 ? " view request pending" : " view requests pending"), oldest(pending, function (r) { return r.date; }), "uro-requests.html"],
+        ["shield", peer.length + (peer.length === 1 ? " proposal waiting for IRB routing" : " proposals waiting for IRB routing"), oldest(peer, function (p) { return p.history[0][1]; }), "uro-proposals.html?status=peer"]
+      ];
+      document.getElementById("attn").innerHTML = items.map(function (it) {
+        return '<a class="attn-item" href="' + it[3] + '"><span class="attn-item__icon"><i class="ic" data-icon="' + it[0] + '"></i></span><span><b>' + esc(it[1]) + '</b>' +
+          (it[2] ? '<span>' + it[2] + '</span>' : '<span>Nothing waiting</span>') + '</span></a>';
+      }).join("");
+
+      ARCH_ICONS.hydrate();
+    })();
+  </script>
+</body>
+</html>

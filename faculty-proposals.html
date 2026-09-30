@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · My Proposals</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["faculty"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="faculty-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="faculty-catalog.html">Browse Repository</a>
+        <a href="faculty-dashboard.html">Dashboard</a>
+        <a href="faculty-submit.html">Submit Proposal</a>
+        <a href="faculty-proposals.html" aria-current="page">My Proposals</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container fac-page fac-page--tight">
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title">My Proposals</h1>
+          <p class="page-sub">All the research proposals you’ve submitted to URO.</p>
+        </div>
+        <a class="btn btn--maroon btn--wide" href="faculty-submit.html"><i class="ic" data-icon="upload"></i>Submit New Proposal</a>
+      </div>
+
+      <p class="notice-ok" id="submitted-ok" hidden><i class="ic" data-icon="checkc"></i><span id="submitted-ok-text">Proposal submitted.</span></p>
+
+      <label class="search-field">
+        <i class="ic" data-icon="search"></i>
+        <span class="visually-hidden">Search my proposals</span>
+        <input type="search" id="q" placeholder="Search my proposals">
+      </label>
+
+      <div class="tabs" role="tablist" aria-label="Filter by status" id="tabs"></div>
+
+      <div class="card req-table prop-table prop-table--list" role="table" aria-label="My proposals">
+        <div class="req-row req-row--head prop-row" role="row">
+          <span role="columnheader">Proposal title</span><span role="columnheader">Submitted</span><span role="columnheader">Status</span><span role="columnheader"><span class="visually-hidden">Action</span></span>
+        </div>
+        <div id="rows"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var P = ARCH_PROPOSALS, list = P.all();
+      var params = new URLSearchParams(location.search);
+      var current = params.get("status") || "all";
+      if (params.get("new")) {
+        var n = P.get(params.get("new"));
+        if (n) {
+          document.getElementById("submitted-ok").hidden = false;
+          document.getElementById("submitted-ok-text").textContent = "“" + n.title + "” was " + (params.get("re") ? "resubmitted" : "submitted") + ". Its status is now “Submitted.”";
+        }
+      }
+
+      // Tabs: All + each status (Figma has no Approved tab; added so every status can be filtered)
+      var keys = ["all", "submitted", "review", "turnitin", "peer", "irb", "approved", "declined"];
+      var tabs = document.getElementById("tabs");
+      tabs.innerHTML = keys.map(function (k) {
+        var n = k === "all" ? list.length : list.filter(function (p) { return p.status === k; }).length;
+        var label = k === "all" ? "All" : P.STATUS[k].label;
+        return '<button class="tab" role="tab" data-status="' + k + '" aria-selected="' + (k === current) + '"><b>' + label + '</b><span>' + n + '</span></button>';
+      }).join("");
+
+      var q = document.getElementById("q");
+      function render() {
+        var term = q.value.trim().toLowerCase();
+        var rows = list.filter(function (p) {
+          return (current === "all" || p.status === current) && (!term || p.title.toLowerCase().indexOf(term) > -1);
+        });
+        document.getElementById("rows").innerHTML = rows.length ? rows.map(P.row).join("") : '<p class="prop-empty">No proposals match.</p>';
+        ARCH_ICONS.hydrate();
+      }
+      tabs.addEventListener("click", function (e) {
+        var t = e.target.closest(".tab"); if (!t) return;
+        current = t.dataset.status;
+        tabs.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", x === t); });
+        render();
+      });
+      q.addEventListener("input", render);
+      render();
+    })();
+  </script>
+</body>
+</html>

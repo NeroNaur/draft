@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · My View Requests</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["general"]);</script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/header.js"></script>
+  
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="catalog.html">Browse Catalog</a>
+        <a href="requests.html" aria-current="page">My View Requests <span class="nav-badge" data-pending-count hidden></span></a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials>MS</span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name>Maria Santos</span><span class="user-menu__role" data-user-role>Student</span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container requests-page">
+      <div>
+        <h1 class="page-title">My View Requests</h1>
+        <p class="page-sub">Track your requests for full-document access.</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Filter by status">
+        <button class="tab" role="tab" aria-selected="true" data-status="all"><b>All</b><span>3</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-status="pending"><b>Pending</b><span>1</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-status="approved"><b>Approved</b><span>1</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-status="denied"><b>Denied</b><span>1</span></button>
+      </div>
+
+      <div class="card req-table" role="table" aria-label="View requests">
+        <div class="req-row req-row--head" role="row">
+          <span role="columnheader">Document</span>
+          <span role="columnheader">Requested on</span>
+          <span role="columnheader">Status</span>
+          <span role="columnheader"><span class="visually-hidden">Action</span></span>
+        </div>
+        <div id="req-rows"></div>
+      </div>
+
+      <div id="denied-notes"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+
+  <script>
+    // Rows come from the shared view-requests data, so URO's Approve / Deny decisions show up here.
+    (function () {
+      var esc = function (t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+      var PILL = {
+        pending: '<span class="status status--pending"><img src="assets/icon-clock.svg" width="18" height="18" alt="">Pending</span>',
+        approved: '<span class="status status--approved"><img src="assets/icon-check-circle.svg" width="18" height="18" alt="">Approved</span>',
+        denied: '<span class="status status--denied"><img src="assets/icon-x-denied.svg" width="18" height="18" alt="">Denied</span>'
+      };
+      var list = ARCH_REQUESTS.list();
+      document.getElementById("req-rows").innerHTML = list.length ? list.map(function (r) {
+        var action = r.status === "approved" ? '<a class="link-arrow" href="detail.html?doc=' + encodeURIComponent(r.docId) + '">Read now <img src="assets/icon-eye.svg" width="18" height="18" alt=""></a>'
+          : r.status === "denied" ? '<a class="link-arrow" href="#denied-' + r.id + '">View reason <img src="assets/icon-right.svg" width="18" height="18" alt=""></a>'
+          : '<span class="req-row__note">Waiting for URO</span>';
+        return '<div class="req-row" role="row" data-status="' + r.status + '">' +
+          '<a class="req-row__doc" role="cell" href="detail.html?doc=' + encodeURIComponent(r.docId) + '">' + esc(r.title) + '</a>' +
+          '<span role="cell"><span class="m-label">Requested </span>' + esc(r.date) + '</span>' +
+          '<span role="cell">' + PILL[r.status] + '</span>' +
+          '<span role="cell">' + action + '</span></div>';
+      }).join("") : '<p class="prop-empty">You haven’t requested full access to any document yet.</p>';
+
+      document.getElementById("denied-notes").innerHTML = list.filter(function (r) { return r.status === "denied"; }).map(function (r) {
+        return '<section class="denied-note" id="denied-' + r.id + '" data-status="denied" aria-labelledby="dn-' + r.id + '">' +
+          '<h2 id="dn-' + r.id + '">About “' + esc(r.title) + '”</h2>' +
+          '<p>URO noted: “' + esc(r.reason || "No reason was given.") + '”</p></section>';
+      }).join("");
+
+      // Tab counts follow the rows
+      document.querySelectorAll('.tab').forEach(function (t) {
+        var st = t.dataset.status;
+        t.querySelector('span').textContent = st === 'all' ? list.length : list.filter(function (r) { return r.status === st; }).length;
+      });
+    })();
+
+    // Status tabs filter the table rows (front-end only).
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const s = tab.dataset.status;
+        document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t === tab));
+        document.querySelectorAll('.req-row[data-status], .denied-note').forEach(r => {
+          r.hidden = !(s === 'all' || r.dataset.status === s);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

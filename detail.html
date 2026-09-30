@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Document details</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["general", "faculty", "instructor", "uro"]);</script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/documents.js"></script>
+  
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="catalog.html" aria-current="page">Browse Catalog</a>
+        <a href="requests.html">My View Requests <span class="nav-badge" data-pending-count hidden></span></a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials>MS</span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name>Maria Santos</span><span class="user-menu__role" data-user-role>Student</span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container detail-page">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="catalog.html">Catalog</a>
+        <img src="assets/icon-right-muted.svg" width="16" height="16" alt="">
+        <a href="results.html">Search results</a>
+        <img src="assets/icon-right-muted.svg" width="16" height="16" alt="">
+        <span aria-current="page">Document details</span>
+      </nav>
+
+      <div class="title-block">
+        <div class="meta"><span class="tag" id="d-type">Capstone Project</span><span id="d-year">2025</span><span aria-hidden="true">·</span><span id="d-college">College of Computing Studies</span></div>
+        <h1 class="page-title" id="d-title">A Web-Based Centralized Institutional Digital Repository for Academic Research Management at Holy Angel University</h1>
+        <p class="title-block__by">By <span id="d-authors">Dela Cruz, Juan P.; Santos, Maria L.</span></p>
+      </div>
+
+      <div class="detail-grid detail-grid--top">
+        <section class="card abstract" aria-labelledby="abstract-title">
+          <h2 class="section-title" id="abstract-title">Abstract</h2>
+          <p id="d-abstract">The University Research Office (URO) of Holy Angel University currently manages the submission, evaluation, and storage of academic research outputs — including faculty research papers, undergraduate theses, and capstone projects — through an email-based process with documents stored in a restricted SharePoint repository. This manual, email-driven workflow limits centralized tracking of submission status and prevents students, faculty, and other members of the HAU community from directly searching or accessing approved research outputs. This study proposes the development of a Web-Based Centralized Institutional Digital Repository for Academic Research Management, a web-based application built using React, Supabase (PostgreSQL), and Knimbus single sign-on (SSO) authentication. The proposed system provides three levels of role-based access — administrative personnel, authorized uploaders, and general authorized users — supporting a structured document submission and approval workflow, Dublin Core metadata-based cataloging, multi-criteria search and filtering, and in-browser document viewing. The system was developed following the Prototyping Model, allowing iterative refinement based on feedback from the URO and target users. To evaluate the proposed system, a total of 364 participants — 361 end-users (URO staff, thesis instructors and coordinators, faculty members, and students with research involvement) selected through purposive and proportional stratified sampling, and 3 IT experts selected through expert sampling — took part in usability testing and technical evaluation. End-user perceptions of usability were measured using the System Usability Scale (SUS), while IT experts evaluated the system's technical quality using an ISO/IEC 25010-based instrument across five quality characteristics: Functional Suitability, Usability, Reliability, Performance Efficiency, and Security. Findings from this evaluation are intended to determine the system's readiness to support centralized, secure, and accessible research output management at Holy Angel University.</p>
+        </section>
+
+        <section class="card preview" aria-labelledby="preview-title">
+          <div class="preview__head">
+            <h2 id="preview-title">Document preview</h2>
+            <button class="link-arrow viewer-locked" type="button" id="open-viewer" aria-describedby="viewer-note">Open in full viewer <img src="assets/icon-lock.svg" width="16" height="16" alt=""></button>
+          </div>
+          <p class="viewer-note" id="viewer-note" hidden>The full viewer opens once URO approves your request.</p>
+          <div class="preview__area" id="preview-area" aria-label="First page of the document"></div>
+        </section>
+      </div>
+
+      <div class="detail-grid detail-grid--bottom">
+        <section class="card doc-info" aria-labelledby="info-title">
+          <h2 class="section-title" id="info-title">Document information</h2>
+          <dl id="d-info"></dl>
+          <p class="doc-info__note">Labels follow the Dublin Core metadata standard used by the University Research Office.</p>
+        </section>
+
+        <section class="card access-card" aria-labelledby="access-title">
+          <span class="icon-circle" id="access-icon"><img src="assets/icon-lock.svg" width="26" height="26" alt=""></span>
+          <h2 id="access-title">Full document requires access</h2>
+          <p id="access-text">You can read the abstract and details above for free. To view the complete PDF in your browser, request access below.</p>
+          <button class="btn btn--maroon" type="button" id="read-btn" hidden><img src="assets/icon-eye.svg" width="20" height="20" alt="" class="img-white">Open full document</button>
+          <button class="btn btn--maroon" type="button" id="request-btn" aria-haspopup="dialog"><img src="assets/icon-send.svg" width="20" height="20" alt=""><span>Request Full Access</span></button>
+          <p class="access-card__status" id="request-status" hidden>Request sent <span id="request-date"></span>.<span class="req-where"> You'll find it in <a href="requests.html">My View Requests</a>.</span></p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <!-- Request Full Access pop-up -->
+  <div class="modal" id="request-modal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog card" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+      <button class="modal__close" type="button" data-close aria-label="Close">&times;</button>
+      <span class="icon-circle"><img src="assets/icon-lock.svg" width="26" height="26" alt=""></span>
+      <h2 class="modal__title" id="modal-title">Request full access</h2>
+      <p class="modal__desc" id="modal-desc">URO will review your request. Once it's approved, you can read the complete PDF in your browser.</p>
+      <div class="modal__doc">
+        <span class="modal__doc-label">Document</span>
+        <p id="modal-doc-title"></p>
+      </div>
+      <form id="request-form" novalidate>
+        <div class="field" data-field="purpose">
+          <label for="purpose">Purpose of request *</label>
+          <span class="select"><select id="purpose" required>
+            <option value="" selected disabled hidden>Choose a purpose</option>
+            <option>Reference for my thesis or capstone project</option>
+            <option>Reference for my own research</option>
+            <option>Class requirement or coursework</option>
+            <option>Other</option>
+          </select></span>
+          <p class="field__error"></p>
+        </div>
+        <div class="field">
+          <label for="note">Note to URO (optional)</label>
+          <textarea class="input" id="note" rows="3" placeholder="Anything URO should know about your request"></textarea>
+        </div>
+        <label class="modal__agree" data-field="agree">
+          <input type="checkbox" id="agree">
+          <span>I will use this document for academic purposes only and will not download, copy or share it.</span>
+        </label>
+        <p class="field__error" id="agree-error"></p>
+        <div class="modal__actions">
+          <button class="btn btn--outline-maroon" type="button" data-close>Cancel</button>
+          <button class="btn btn--maroon" type="submit"><img src="assets/icon-send.svg" width="20" height="20" alt="">Submit request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="arch-toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      // Which document? detail.html?doc=<id> (demo: every document shows the same sample PDF)
+      var DOC = ARCH_DOCUMENTS.get(new URLSearchParams(location.search).get("doc") || "cidr-2025");
+      var DOC_ID = DOC.id, PDF_SRC = { docId: DOC.pdf }, docTitle = DOC.title;
+      document.title = "ARCH · " + DOC.title;
+      document.getElementById("d-type").textContent = DOC.type;
+      document.getElementById("d-year").textContent = DOC.year;
+      document.getElementById("d-college").textContent = DOC.college;
+      document.getElementById("d-title").textContent = DOC.title;
+      document.getElementById("d-authors").textContent = DOC.authors;
+      document.getElementById("d-abstract").textContent = DOC.abstract;
+      var info = [["Title", DOC.title], ["Author", DOC.authors], ["Keywords", DOC.keywords], ["Document type", DOC.type], ["Department", DOC.department], ["Date", DOC.year], ["Format", "PDF"], ["Language", "English"]];
+      document.getElementById("d-info").innerHTML = info.map(function (r) {
+        var dd = document.createElement("dd"); dd.textContent = r[1];
+        return '<div class="doc-info__row"><dt>' + r[0] + '</dt>' + dd.outerHTML + '</div>';
+      }).join("");
+
+      var modal = document.getElementById("request-modal"), form = document.getElementById("request-form");
+      var btn = document.getElementById("request-btn"), lastFocus = null;
+      document.getElementById("modal-doc-title").textContent = docTitle;
+      var status = document.getElementById("request-status");
+
+      function showPending(req) {
+        btn.disabled = true;
+        btn.querySelector("span").textContent = "Request pending";
+        status.innerHTML = 'Request sent on <span></span>. URO will review it.<span class="req-where"> You\u2019ll find it in <a href="requests.html">My View Requests</a>.</span>';
+        status.querySelector("span").textContent = req.date;
+        var u = ARCH.current() || {}; if (u.kind !== "general") status.querySelectorAll(".req-where").forEach(function (el) { el.hidden = true; });
+        status.hidden = false;
+      }
+      // Access granted (approved request, or URO): the card becomes "You have access"
+      function showAccess(text) {
+        var card = document.querySelector(".access-card");
+        card.classList.add("access-card--ok");
+        document.getElementById("access-icon").innerHTML = '<img src="assets/icon-check-circle.svg" width="26" height="26" alt="">';
+        document.getElementById("access-title").textContent = "You have access";
+        document.getElementById("access-text").textContent = text;
+        btn.hidden = true; status.hidden = true;
+        document.getElementById("read-btn").hidden = false;
+      }
+      function showDenied(req) {
+        status.className = "access-card__status access-card__status--denied";
+        status.textContent = "URO denied your earlier request on " + req.decided + (req.reason ? ": \u201c" + req.reason + "\u201d" : ".") + " You may send a new request.";
+        status.hidden = false;
+      }
+      var me = ARCH.current() || {}, existing = ARCH_REQUESTS.find(DOC_ID);
+      if (me.kind === "uro") showAccess("As URO staff you can open every document in the repository.");
+      else if (existing && existing.status === "approved") showAccess("URO approved your request on " + existing.decided + ". You have time-limited, in-browser access to the full document.");
+      else if (existing && existing.status === "pending") showPending(existing);
+      else if (existing && existing.status === "denied") showDenied(existing);
+
+      function open() {
+        lastFocus = document.activeElement;
+        modal.hidden = false; document.body.classList.add("modal-open");
+        document.getElementById("purpose").focus();
+      }
+      function close() {
+        modal.hidden = true; document.body.classList.remove("modal-open");
+        if (lastFocus) lastFocus.focus();
+      }
+      btn.addEventListener("click", open);
+      modal.querySelectorAll("[data-close]").forEach(function (el) { el.addEventListener("click", close); });
+      document.addEventListener("keydown", function (e) {
+        if (modal.hidden) return;
+        if (e.key === "Escape") close();
+        if (e.key === "Tab") { // keep focus inside the pop-up
+          var f = modal.querySelectorAll("button, select, textarea, input");
+          var first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var purpose = document.getElementById("purpose"), agree = document.getElementById("agree"), ok = true;
+        var pf = form.querySelector('[data-field="purpose"]');
+        pf.classList.toggle("is-invalid", !purpose.value);
+        pf.querySelector(".field__error").textContent = purpose.value ? "" : "Choose a purpose for your request.";
+        document.getElementById("agree-error").textContent = agree.checked ? "" : "Please confirm how you'll use the document.";
+        if (!purpose.value) { purpose.focus(); ok = false; } else if (!agree.checked) { agree.focus(); ok = false; }
+        if (!ok) return;
+        var req = ARCH_REQUESTS.add({ docId: DOC_ID, title: docTitle, purpose: purpose.value, note: document.getElementById("note").value.trim() });
+        close(); status.className = "access-card__status"; showPending(req);
+        document.dispatchEvent(new Event("arch:requests-changed"));
+        var t = document.getElementById("toast");
+        t.textContent = "Request sent. URO will review it."; t.classList.add("is-on");
+        setTimeout(function () { t.classList.remove("is-on"); }, 2600);
+      });
+      form.querySelectorAll("select, input").forEach(function (el) {
+        el.addEventListener("change", function () {
+          if (el.id === "purpose") { var pf = form.querySelector('[data-field="purpose"]'); pf.classList.remove("is-invalid"); pf.querySelector(".field__error").textContent = ""; }
+          if (el.id === "agree") document.getElementById("agree-error").textContent = "";
+        });
+      });
+
+      // Preview: the real first page of the PDF (drawn with PDF.js, watermarked)
+      ARCH_PDF.preview(document.getElementById("preview-area"), PDF_SRC, { inset: 0, label: "Page 1 of " + docTitle }).catch(function () {});
+
+      // Full viewer: URO can always open it; everyone else after URO approves their view request
+      var viewerBtn = document.getElementById("open-viewer");
+      function canView() {
+        var u = ARCH.current() || {}, r = ARCH_REQUESTS.find(DOC_ID);
+        return u.kind === "uro" || (r && r.status === "approved");
+      }
+      if (canView()) {
+        viewerBtn.classList.remove("viewer-locked");
+        viewerBtn.innerHTML = 'Open in full viewer <img src="assets/icon-eye.svg" width="18" height="18" alt="">';
+        document.getElementById("viewer-note").textContent = "";
+      }
+      function openFull() {
+        if (!canView()) { document.getElementById("viewer-note").hidden = false; return; }
+        ARCH_PDF.open(PDF_SRC, { title: docTitle });
+      }
+      viewerBtn.addEventListener("click", openFull);
+      document.getElementById("read-btn").addEventListener("click", openFull);
+    })();
+  </script>
+</body>
+</html>

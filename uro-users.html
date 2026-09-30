@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · User & Role Management</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["uro"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/view-requests.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="uro-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav main-nav--6" aria-label="Main">
+        <a href="uro-catalog.html">Browse Repository</a>
+        <a href="uro-dashboard.html">Dashboard</a>
+        <a href="uro-review.html">Research Review</a>
+        <a href="uro-proposals.html">Proposals</a>
+        <a href="uro-requests.html">View Requests</a>
+        <a href="uro-users.html" aria-current="page">Users</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container fac-page fac-page--tight">
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title">User &amp; Role Management</h1>
+          <p class="page-sub">Create accounts and choose who can upload, submit proposals, or manage the repository.</p>
+        </div>
+        <button class="btn btn--maroon btn--wide" type="button" id="create"><i class="ic" data-icon="idcard"></i>Create Account</button>
+      </div>
+
+      <p class="notice-ok" id="saved-ok" hidden><i class="ic" data-icon="checkc"></i><span id="saved-text"></span></p>
+
+      <div class="users-cols">
+        <div class="users-main">
+          <div class="filter-bar">
+            <label class="search-field">
+              <i class="ic" data-icon="search"></i>
+              <span class="visually-hidden">Search users</span>
+              <input type="search" id="q" placeholder="Search by name or HAU email">
+            </label>
+            <span class="select filter-bar__select"><label class="visually-hidden" for="role-filter">Role</label><select id="role-filter"><option value="">All roles</option></select></span>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Filter by role" id="tabs"></div>
+
+          <div class="card req-table" role="table" aria-label="System accounts">
+            <div class="req-row req-row--head a-row us-row" role="row">
+              <span role="columnheader">Name</span><span role="columnheader">College or office</span><span role="columnheader">Role</span>
+            </div>
+            <div id="rows"></div>
+          </div>
+
+          <div class="unsaved" id="unsaved" hidden role="status">
+            <i class="ic" data-icon="alert"></i>
+            <p id="unsaved-text"></p>
+            <div class="unsaved__btns">
+              <button class="btn btn--outline-maroon" type="button" id="discard">Discard</button>
+              <button class="btn btn--maroon" type="button" id="save"><i class="ic" data-icon="check"></i>Save changes</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="side-col">
+          <section class="card roles-card" aria-labelledby="roles-title">
+            <h2 class="card-title" id="roles-title">What each role can do</h2>
+            <div class="role-item"><span class="role-item__icon"><i class="ic" data-icon="shield"></i></span><div><b>Admin</b><p>URO staff. Manages users and roles, reviews completed research, updates proposal status, and approves or denies view requests.</p></div></div>
+            <div class="role-item"><span class="role-item__icon"><i class="ic" data-icon="upload"></i></span><div><b>Authorized Uploader</b><p>URO staff or thesis instructors who upload approved completed research with Dublin Core metadata.</p></div></div>
+            <div class="role-item"><span class="role-item__icon"><i class="ic" data-icon="idcard"></i></span><div><b>Faculty</b><p>Dual role: submits and tracks research proposals here, and browses the repository separately via Knimbus SSO.</p></div></div>
+            <div class="role-item role-item--muted"><span class="role-item__icon"><i class="ic" data-icon="book"></i></span><div><b>General users</b><p>Students and the HAU community sign in through Knimbus SSO, so they aren’t managed here. They can search, view abstracts, and request full-document access.</p></div></div>
+          </section>
+          <p class="info-bar info-bar--side"><i class="ic" data-icon="info"></i>New accounts created here receive their URO username and temporary password by email.</p>
+        </aside>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var A = ARCH_ADMIN, esc = A.esc, toast = ARCH_PROPOSALS.toast, me = ARCH.current() || {};
+      var current = "all", pendingRoles = {}, list;
+      var tabs = document.getElementById("tabs"), q = document.getElementById("q"), rf = document.getElementById("role-filter");
+      A.ROLES.forEach(function (r) { rf.add(new Option(r, r)); });
+
+      function load() { list = A.users(); }
+      function roleOf(u) { return pendingRoles[u.id] || u.role; }
+      function drawTabs() {
+        tabs.innerHTML = [["all", "All"]].concat(A.ROLES.map(function (r) { return [r, r]; })).map(function (t) {
+          var n = t[0] === "all" ? list.length : list.filter(function (u) { return u.role === t[0]; }).length;
+          return '<button class="tab" type="button" role="tab" data-role="' + t[0] + '" aria-selected="' + (t[0] === current) + '"><b>' + t[1] + '</b><span>' + n + '</span></button>';
+        }).join("");
+      }
+      function row(u) {
+        var mine = u.email === me.email, changed = !!pendingRoles[u.id];
+        var opts = A.ROLES.map(function (r) { return '<option' + (r === roleOf(u) ? " selected" : "") + '>' + r + '</option>'; }).join("");
+        return '<div class="req-row a-row us-row' + (changed ? " is-changed" : "") + '" role="row">' +
+          '<span role="cell" class="user-cell"><span class="avatar" aria-hidden="true">' + A.initials(u.name) + '</span><span><b>' + esc(u.name) + (mine ? ' <em>(you)</em>' : "") + '</b><small>' + esc(u.email) + '</small></span></span>' +
+          '<span role="cell" class="a-cell"><span class="m-label">Office: </span>' + esc(u.office) + '</span>' +
+          '<span role="cell"><span class="select select--sm"><label class="visually-hidden" for="r-' + u.id + '">Role for ' + esc(u.name) + '</label><select id="r-' + u.id + '" data-user="' + u.id + '"' +
+          (mine ? ' disabled title="You can’t change your own role."' : "") + '>' + opts + '</select></span></span></div>';
+      }
+      function render() {
+        var term = q.value.trim().toLowerCase(), rv = rf.value;
+        var rows = list.filter(function (u) {
+          return (current === "all" || u.role === current) && (!rv || u.role === rv) && (!term || (u.name + " " + u.email).toLowerCase().indexOf(term) > -1);
+        });
+        document.getElementById("rows").innerHTML = rows.length ? rows.map(row).join("") : '<p class="prop-empty">No accounts match.</p>';
+        drawUnsaved();
+      }
+      function drawUnsaved() {
+        var ids = Object.keys(pendingRoles), box = document.getElementById("unsaved");
+        box.hidden = !ids.length;
+        if (!ids.length) return;
+        var txt = ids.length === 1
+          ? (function () { var u = list.filter(function (x) { return x.id === ids[0]; })[0]; return "1 unsaved change: " + u.name + " will be granted the " + pendingRoles[u.id] + " role."; })()
+          : ids.length + " unsaved changes to user roles.";
+        document.getElementById("unsaved-text").textContent = txt;
+        ARCH_ICONS.hydrate(box);
+      }
+      function refresh() { load(); drawTabs(); render(); }
+
+      tabs.addEventListener("click", function (e) {
+        var t = e.target.closest(".tab"); if (!t) return;
+        current = t.dataset.role;
+        tabs.querySelectorAll(".tab").forEach(function (x) { x.setAttribute("aria-selected", x === t); });
+        render();
+      });
+      q.addEventListener("input", render); rf.addEventListener("change", render);
+
+      document.getElementById("rows").addEventListener("change", function (e) {
+        var sel = e.target.closest("[data-user]"); if (!sel) return;
+        var u = list.filter(function (x) { return x.id === sel.dataset.user; })[0];
+        if (sel.value === u.role) delete pendingRoles[u.id]; else pendingRoles[u.id] = sel.value;
+        sel.closest(".us-row").classList.toggle("is-changed", !!pendingRoles[u.id]);
+        drawUnsaved();
+      });
+      document.getElementById("discard").addEventListener("click", function () { pendingRoles = {}; render(); toast("Changes discarded."); });
+      document.getElementById("save").addEventListener("click", function () {
+        var n = Object.keys(pendingRoles).length;
+        A.saveRoles(pendingRoles); pendingRoles = {}; refresh();
+        toast(n === 1 ? "Role saved." : n + " roles saved.");
+      });
+
+      // Create Account (not designed in the Figma: a simple pop-up)
+      // Secure password generator: crypto.getRandomValues + rejection sampling (no modulo bias), no look-alike characters.
+      var SETS = { upper: "ABCDEFGHJKLMNPQRSTUVWXYZ", lower: "abcdefghijkmnopqrstuvwxyz", digit: "23456789", symbol: "!@#$%^&*-_=+?" };
+      function randInt(n) {
+        var max = Math.floor(4294967296 / n) * n, buf = new Uint32Array(1);
+        do { crypto.getRandomValues(buf); } while (buf[0] >= max);
+        return buf[0] % n;
+      }
+      function generate(len) {
+        var all = SETS.upper + SETS.lower + SETS.digit + SETS.symbol;
+        var chars = [SETS.upper, SETS.lower, SETS.digit, SETS.symbol].map(function (set) { return set[randInt(set.length)]; });
+        while (chars.length < len) chars.push(all[randInt(all.length)]);
+        for (var i = chars.length - 1; i > 0; i--) { var j = randInt(i + 1), t = chars[i]; chars[i] = chars[j]; chars[j] = t; } // shuffle
+        return chars.join("");
+      }
+      var RULES = [
+        ["len", "At least 12 characters", function (v) { return v.length >= 12; }],
+        ["upper", "An uppercase letter", function (v) { return /[A-Z]/.test(v); }],
+        ["lower", "A lowercase letter", function (v) { return /[a-z]/.test(v); }],
+        ["digit", "A number", function (v) { return /[0-9]/.test(v); }],
+        ["symbol", "A symbol (e.g. ! @ # $)", function (v) { return /[^A-Za-z0-9\s]/.test(v); }]
+      ];
+      function strength(v) {
+        if (!v) return 0;
+        var passed = RULES.filter(function (r) { return r[2](v); }).length;
+        var score = passed + (v.length >= 16 ? 1 : 0) - (/(.)\1\1/.test(v) ? 1 : 0);
+        return score <= 2 ? 1 : score <= 4 ? 2 : score === 5 ? 3 : 4;
+      }
+      var STRENGTH = ["", "Weak", "Fair", "Good", "Strong"];
+      function pwField(id, label, auto) {
+        return '<div class="pw-wrap"><input class="input" id="' + id + '" type="password" autocomplete="new-password" aria-label="' + label + '"' + (auto ? " readonly" : "") + '>' +
+          '<button class="pw-toggle" type="button" data-toggle="' + id + '" aria-label="Show ' + label.toLowerCase() + '" aria-pressed="false"><img src="assets/icon-eye.svg" width="18" height="18" alt=""></button></div>';
+      }
+
+      document.getElementById("create").addEventListener("click", function () {
+        A.modal({
+          title: "Create account", desc: "The new user receives their URO username and a temporary password by email.",
+          body: '<div class="field" data-field="name"><label for="c-name">Full name *</label><input class="input" id="c-name" type="text" placeholder="e.g. Dr. Maria Cruz"><p class="field__error"></p></div>' +
+            '<div class="field" data-field="email"><label for="c-email">HAU email *</label><input class="input" id="c-email" type="email" autocomplete="off" placeholder="name@hau.edu.ph"><p class="field__error"></p></div>' +
+            '<div class="field" data-field="office"><label for="c-office">College or office *</label><span class="select"><select id="c-office"><option value="" selected disabled hidden>Choose a college or office</option>' +
+            A.OFFICES.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join("") + '</select></span><p class="field__error"></p></div>' +
+            '<div class="field" data-field="role"><label for="c-role">Role *</label><span class="select"><select id="c-role"><option value="" selected disabled hidden>Choose a role</option>' +
+            A.ROLES.map(function (r) { return '<option>' + r + '</option>'; }).join("") + '</select></span><p class="field__error"></p></div>' +
+
+            '<fieldset class="pw-setup"><legend class="field__label">Temporary password *</legend>' +
+            '<div class="seg" role="radiogroup" aria-label="How to set the password">' +
+              '<label class="seg__opt"><input type="radio" name="pwmode" value="auto" checked><span>Auto-generate <em>Recommended</em></span></label>' +
+              '<label class="seg__opt"><input type="radio" name="pwmode" value="manual"><span>Set manually</span></label>' +
+            '</div>' +
+            '<div class="pw-auto" id="pw-auto">' + pwField("c-gen", "Generated password", true) +
+              '<div class="pw-auto__btns"><button class="text-link" type="button" id="pw-copy">Copy</button><button class="text-link" type="button" id="pw-new">Generate new</button></div>' +
+              '<p class="field__help">16 random characters from the browser’s secure random generator. Look-alike characters (0/O, 1/l/I) are left out.</p></div>' +
+            '<div class="pw-manual" id="pw-manual" hidden>' +
+              '<div class="field" data-field="pw"><label for="c-pw">Password</label>' + pwField("c-pw", "Password") + '</div>' +
+              '<div class="pw-meter" aria-live="polite"><span class="pw-meter__bar"><i id="pw-bar"></i></span><span id="pw-strength" class="pw-meter__label"></span></div>' +
+              '<ul class="pw-rules" id="pw-rules">' + RULES.map(function (r) { return '<li data-rule="' + r[0] + '">' + r[1] + '</li>'; }).join("") + '</ul>' +
+              '<div class="field" data-field="pw2"><label for="c-pw2">Confirm password</label>' + pwField("c-pw2", "Confirm password") + '<p class="field__error" id="pw2-error"></p></div>' +
+            '</div>' +
+            '<p class="field__error" id="pw-error"></p></fieldset>',
+          submitLabel: "Create account", submitIcon: "idcard",
+          onOpen: function (form) {
+            var gen = form.querySelector("#c-gen"), pw = form.querySelector("#c-pw"), pw2 = form.querySelector("#c-pw2");
+            gen.value = generate(16);
+            form.querySelector("#pw-new").addEventListener("click", function () { gen.value = generate(16); toast("New password generated."); });
+            form.querySelector("#pw-copy").addEventListener("click", function () {
+              function done() { toast("Password copied. Share it only through a secure channel."); }
+              if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(gen.value).then(done, fallback); else fallback();
+              function fallback() { var t = gen.type; gen.type = "text"; gen.select(); try { document.execCommand("copy"); done(); } catch (e) { toast("Couldn’t copy. Select the password and copy it."); } gen.type = t; gen.setSelectionRange(0, 0); }
+            });
+            form.querySelectorAll("[data-toggle]").forEach(function (b) {
+              b.addEventListener("click", function () {
+                var inp = form.querySelector("#" + b.dataset.toggle), show = inp.type === "password";
+                inp.type = show ? "text" : "password";
+                b.setAttribute("aria-pressed", show);
+                b.setAttribute("aria-label", (show ? "Hide " : "Show ") + inp.getAttribute("aria-label").toLowerCase());
+              });
+            });
+            form.querySelectorAll('input[name="pwmode"]').forEach(function (r) {
+              r.addEventListener("change", function () {
+                var manual = form.querySelector('input[name="pwmode"]:checked').value === "manual";
+                form.querySelector("#pw-auto").hidden = manual; form.querySelector("#pw-manual").hidden = !manual;
+                form.querySelector("#pw-error").textContent = "";
+                if (manual) pw.focus();
+              });
+            });
+            function check() {
+              var v = pw.value, st = strength(v);
+              RULES.forEach(function (r) { form.querySelector('[data-rule="' + r[0] + '"]').classList.toggle("is-ok", r[2](v)); });
+              var bar = form.querySelector("#pw-bar");
+              bar.style.width = (st * 25) + "%"; bar.className = "s" + st;
+              form.querySelector("#pw-strength").textContent = v ? STRENGTH[st] : "";
+              var e2 = form.querySelector("#pw2-error");
+              e2.textContent = pw2.value && pw2.value !== v ? "Passwords don’t match." : "";
+              form.querySelector('[data-field="pw2"]').classList.toggle("is-invalid", !!e2.textContent);
+              form.querySelector("#pw-error").textContent = "";
+            }
+            pw.addEventListener("input", check); pw2.addEventListener("input", check);
+          },
+          onSubmit: function (form) {
+            var v = { name: form.querySelector("#c-name").value.trim(), email: form.querySelector("#c-email").value.trim().toLowerCase(),
+              office: form.querySelector("#c-office").value, role: form.querySelector("#c-role").value };
+            var errs = {};
+            if (!v.name) errs.name = "Enter the person’s full name.";
+            if (!/^[^@\s]+@hau\.edu\.ph$/.test(v.email)) errs.email = "Use an HAU email ending in @hau.edu.ph.";
+            else if (A.users().some(function (u) { return u.email.toLowerCase() === v.email; })) errs.email = "An account with this email already exists.";
+            if (!v.office) errs.office = "Choose a college or office.";
+            if (!v.role) errs.role = "Choose a role.";
+            var first = null;
+            ["name", "email", "office", "role"].forEach(function (k) {
+              var f = form.querySelector('[data-field="' + k + '"]');
+              f.classList.toggle("is-invalid", !!errs[k]); f.querySelector(".field__error").textContent = errs[k] || "";
+              if (errs[k] && !first) first = f.querySelector("input, select");
+            });
+
+            // Password
+            var manual = form.querySelector('input[name="pwmode"]:checked').value === "manual";
+            var pw = form.querySelector("#c-pw"), pw2 = form.querySelector("#c-pw2"), pe = form.querySelector("#pw-error");
+            pe.textContent = "";
+            if (manual) {
+              var failed = RULES.filter(function (r) { return !r[2](pw.value); });
+              if (!pw.value) { pe.textContent = "Enter a password."; if (!first) first = pw; }
+              else if (failed.length) { pe.textContent = "The password still needs: " + failed.map(function (r) { return r[1].toLowerCase(); }).join(", ") + "."; if (!first) first = pw; }
+              else if (pw.value.toLowerCase().indexOf(v.email.split("@")[0]) > -1 && v.email) { pe.textContent = "Don’t use the email name inside the password."; if (!first) first = pw; }
+              else if (pw2.value !== pw.value) {
+                form.querySelector("#pw2-error").textContent = pw2.value ? "Passwords don’t match." : "Type the password again to confirm it.";
+                form.querySelector('[data-field="pw2"]').classList.add("is-invalid"); if (!first) first = pw2;
+              }
+            }
+            if (first) { first.focus(); return false; }
+
+            // The password itself is never saved or shown again (prototype: nothing is really stored or emailed).
+            A.addUser(v); refresh();
+            document.getElementById("saved-ok").hidden = false;
+            document.getElementById("saved-text").textContent = "Account created for " + v.name + " (" + v.role + "). Their URO username and temporary password were emailed to " + v.email + ".";
+            return true;
+          }
+        });
+        document.querySelectorAll("#admin-modal select").forEach(function (s) {
+          function upd() { s.classList.toggle("is-placeholder", !s.value); } s.addEventListener("change", upd); upd();
+        });
+      });
+
+      refresh();
+    })();
+  </script>
+</body>
+</html>

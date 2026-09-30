@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARCH · Submit New Proposal</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/accounts.js"></script>
+  <script src="js/auth.js"></script>
+  <script>ARCH.guard(["faculty"]);</script>
+  <script src="js/icons.js"></script>
+  <script src="js/proposals.js"></script>
+  <script src="js/filestore.js"></script>
+  <script src="js/pdfviewer.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="faculty-catalog.html" aria-label="ARCH home">
+        <span class="brand__mark"><img src="assets/logo.png" alt=""></span>
+        <span><span class="brand__name">ARCH</span><span class="brand__tag">Angelite Repository Central Hub</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="faculty-catalog.html">Browse Repository</a>
+        <a href="faculty-dashboard.html">Dashboard</a>
+        <a href="faculty-submit.html" aria-current="page">Submit Proposal</a>
+        <a href="faculty-proposals.html">My Proposals</a>
+      </nav>
+      <div class="user-menu-wrap">
+      <button class="user-menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Account menu">
+        <span class="avatar" aria-hidden="true" data-user-initials></span>
+        <span class="user-menu__text"><span class="user-menu__name" data-user-name></span><span class="user-menu__role" data-user-role></span></span>
+        <img src="assets/icon-down-light.svg" width="18" height="18" alt="">
+      </button>
+        <div class="account-menu" id="account-menu" role="menu" hidden>
+          <p class="account-menu__who"><b data-user-name></b><span data-user-email></span></p>
+          <button type="button" role="menuitem" class="account-menu__item" data-profile>My Profile <span class="account-menu__soon">Coming soon</span></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <form class="container fac-page" id="proposal-form" novalidate>
+      <div class="page-head">
+        <div class="page-head__titles">
+          <h1 class="page-title">Submit New Proposal</h1>
+          <p class="page-sub">Upload your proposal and provide basic details. URO will route it through review.</p>
+        </div>
+      </div>
+
+      <section class="card form-card" aria-labelledby="step1">
+        <h2 class="section-title" id="step1">Step 1 · Choose your proposal PDF</h2>
+        <div class="dropzone" id="dropzone">
+          <span class="dropzone__icon"><i class="ic" data-icon="upload"></i></span>
+          <p class="dropzone__title">Drag and drop your PDF here</p>
+          <p class="dropzone__or">or</p>
+          <label class="btn btn--outline-maroon" for="pdf">Browse files</label>
+          <input class="visually-hidden" type="file" id="pdf" accept="application/pdf,.pdf">
+          <p class="dropzone__hint">PDF files only, up to 25 MB</p>
+        </div>
+        <p class="field__error" id="pdf-error"></p>
+        <div class="added-file" id="added-file" hidden>
+          <i class="ic" data-icon="fileLg"></i>
+          <div class="added-file__text">
+            <p class="added-file__name" id="file-name"></p>
+            <p class="added-file__meta" id="file-meta"></p>
+          </div>
+          <button class="text-link" type="button" id="remove-file">Remove</button>
+        </div>
+      </section>
+
+      <section class="card form-card form-card--details" aria-labelledby="step2">
+        <h2 class="section-title" id="step2">Step 2 · Proposal details</h2>
+
+        <div class="field" data-field="title">
+          <label for="f-title">Proposal title *</label>
+          <input class="input" id="f-title" name="title" type="text" placeholder="Full title of your proposed research" required>
+          <p class="field__error"></p>
+        </div>
+
+        <div class="field-row">
+          <div class="field" data-field="type">
+            <label for="f-type">Research type *</label>
+            <span class="select"><select id="f-type" name="type" required>
+              <option value="" selected disabled hidden>e.g. Applied, Basic, Action Research</option>
+              <option>Applied Research</option><option>Basic Research</option><option>Action Research</option>
+              <option>Descriptive Research</option><option>Experimental Research</option><option>Qualitative Research</option>
+            </select></span>
+            <p class="field__error"></p>
+          </div>
+          <div class="field" data-field="year">
+            <label for="f-year">Target completion year</label>
+            <span class="select"><select id="f-year" name="year">
+              <option value="" selected>e.g. 2027</option>
+              <option>2026</option><option>2027</option><option>2028</option><option>2029</option>
+            </select></span>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" data-field="college">
+            <label for="f-college">College *</label>
+            <span class="select"><select id="f-college" name="college" required>
+              <option value="" selected disabled hidden>Choose your college</option>
+              <option>School of Business and Accountancy</option>
+              <option>School of Computing</option>
+              <option>School of Education</option>
+              <option>School of Engineering and Architecture</option>
+              <option>School of Nursing and Allied Medical Sciences</option>
+              <option>School of Arts and Sciences</option>
+              <option>School of Hospitality and Tourism Management</option>
+              <option>College of Criminal Justice Education and Forensics</option>
+            </select></span>
+            <p class="field__error"></p>
+          </div>
+          <div class="field" data-field="department">
+            <label for="f-dept">Department *</label>
+            <span class="select"><select id="f-dept" name="department" required>
+              <option value="" selected disabled hidden>Choose your department</option>
+              <option>Accountancy</option><option>Business Administration</option><option>Information Technology</option>
+              <option>Computer Science</option><option>Education</option><option>Engineering</option><option>Nursing</option>
+              <option>Psychology</option><option>Hospitality Management</option><option>Criminology</option>
+            </select></span>
+            <p class="field__error"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-co">Co-researchers (if any)</label>
+          <input class="input" id="f-co" name="coauthors" type="text" placeholder="Full names, separated by semicolons">
+        </div>
+
+        <div class="field" data-field="abstract">
+          <label for="f-abstract">Short abstract *</label>
+          <textarea class="input" id="f-abstract" name="abstract" placeholder="Briefly describe the purpose and scope of your proposed research." required></textarea>
+          <p class="field__error"></p>
+        </div>
+
+        <label class="check-box"><input type="checkbox" id="f-irb" name="irb"><span>This study involves human participants and may require IRB review.</span></label>
+      </section>
+
+      <div class="form-actions">
+        <p class="form-actions__note"><i class="ic" data-icon="info"></i>After submitting, your proposal status will show as “Submitted.”</p>
+        <div class="form-actions__btns">
+          <button class="btn btn--outline-maroon" type="button" id="save-draft">Save as draft</button>
+          <button class="btn btn--maroon" type="submit"><img src="assets/icon-send.svg" width="20" height="20" alt="">Submit proposal</button>
+        </div>
+      </div>
+    </form>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Holy Angel University · University Research Office</p>
+      <nav aria-label="Footer"><a href="#">Help</a><span aria-hidden="true">·</span><a href="#">Privacy</a><span aria-hidden="true">·</span><a href="#">Contact URO</a></nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var P = ARCH_PROPOSALS, DRAFT = "arch.proposalDraft";
+      var form = document.getElementById("proposal-form");
+      var input = document.getElementById("pdf"), zone = document.getElementById("dropzone");
+      var added = document.getElementById("added-file"), pdfErr = document.getElementById("pdf-error");
+      var chosen = null; // { name, size }
+
+      function mb(b) { return (b / 1048576).toFixed(1) + " MB"; }
+      function setFile(f) {
+        pdfErr.textContent = ""; zone.classList.remove("is-invalid");
+        if (!f) return;
+        var isPdf = /\.pdf$/i.test(f.name) || f.type === "application/pdf";
+        if (!isPdf) { pdfErr.textContent = "Please choose a PDF file."; zone.classList.add("is-invalid"); return; }
+        if (f.size > 25 * 1048576) { pdfErr.textContent = "That file is larger than 25 MB."; zone.classList.add("is-invalid"); return; }
+        chosen = { name: f.name, size: f.size, file: f };
+        document.getElementById("file-name").textContent = f.name;
+        document.getElementById("file-meta").textContent = mb(f.size) + " · Ready to submit";
+        added.hidden = false;
+      }
+      input.addEventListener("change", function () { setFile(input.files[0]); });
+      document.getElementById("remove-file").addEventListener("click", function () { chosen = null; input.value = ""; added.hidden = true; });
+      ["dragenter", "dragover"].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add("is-over"); }); });
+      ["dragleave", "drop"].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove("is-over"); }); });
+      zone.addEventListener("drop", function (e) { if (e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]); });
+
+      // Grey placeholder text for selects until a value is chosen
+      form.querySelectorAll("select").forEach(function (s) {
+        function upd() { s.classList.toggle("is-placeholder", !s.value); }
+        s.addEventListener("change", upd); upd();
+      });
+
+      // Restore a saved draft (text fields only; files can't be kept)
+      try {
+        var d = JSON.parse(sessionStorage.getItem(DRAFT) || "null");
+        if (d) Object.keys(d).forEach(function (k) {
+          var el = form.elements[k]; if (!el) return;
+          if (el.type === "checkbox") el.checked = !!d[k]; else el.value = d[k];
+          el.dispatchEvent(new Event("change"));
+        });
+      } catch (e) {}
+
+      function values() {
+        return { title: form.title.value.trim(), type: form.type.value, year: form.year.value, college: form.college.value,
+          department: form.department.value, coauthors: form.coauthors.value.trim(), abstract: form.abstract.value.trim(), irb: form.irb.checked };
+      }
+
+      document.getElementById("save-draft").addEventListener("click", function () {
+        try { sessionStorage.setItem(DRAFT, JSON.stringify(values())); } catch (e) {}
+        P.toast("Draft saved. It will stay here until you close this tab.");
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var v = values(), first = null;
+        var required = { title: "Enter the proposal title.", type: "Choose a research type.", college: "Choose your college.", department: "Choose your department.", abstract: "Write a short abstract." };
+        Object.keys(required).forEach(function (k) {
+          var f = form.querySelector('[data-field="' + k + '"]'), bad = !v[k];
+          f.classList.toggle("is-invalid", bad);
+          f.querySelector(".field__error").textContent = bad ? required[k] : "";
+          if (bad && !first) first = f.querySelector("input,select,textarea");
+        });
+        if (!chosen) { pdfErr.textContent = "Choose your proposal PDF."; zone.classList.add("is-invalid"); first = first || input; zone.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        if (!chosen || first) { if (first && first !== input) first.focus(); return; }
+
+        var data = { title: v.title, type: v.type, department: v.college + " · " + v.department, coauthors: v.coauthors || "None",
+          file: chosen.name + " · " + mb(chosen.size), abstract: v.abstract, irb: v.irb, year: v.year };
+        form.querySelector('button[type="submit"]').disabled = true;
+        // Keep the real PDF in this browser session (IndexedDB) so URO can open it
+        ARCH_FILES.put(chosen.file).then(function (key) { data.fileKey = key; }, function () {
+          P.toast("The PDF couldn’t be stored in this browser, so only its name was saved.");
+        }).then(function () {
+          var p = P.add(data);
+          try { sessionStorage.removeItem(DRAFT); } catch (e2) {}
+          location.href = "faculty-proposals.html?new=" + p.id;
+        });
+      });
+
+      form.querySelectorAll("input,select,textarea").forEach(function (el) {
+        el.addEventListener("input", function () {
+          var f = el.closest(".field"); if (f) { f.classList.remove("is-invalid"); var er = f.querySelector(".field__error"); if (er) er.textContent = ""; }
+        });
+        el.addEventListener("change", function () { el.dispatchEvent(new Event("input")); });
+      });
+    })();
+  </script>
+</body>
+</html>
