@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/accounts.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/colleges.js"></script>
   <script>ARCH.guard(["faculty"]);</script>
   <script src="js/icons.js"></script>
   <script src="js/proposals.js"></script>
@@ -104,14 +105,6 @@
             <label for="f-college">College *</label>
             <span class="select"><select id="f-college" name="college" required>
               <option value="" selected disabled hidden>Choose your college</option>
-              <option>School of Business and Accountancy</option>
-              <option>School of Computing</option>
-              <option>School of Education</option>
-              <option>School of Engineering and Architecture</option>
-              <option>School of Nursing and Allied Medical Sciences</option>
-              <option>School of Arts and Sciences</option>
-              <option>School of Hospitality and Tourism Management</option>
-              <option>College of Criminal Justice Education and Forensics</option>
             </select></span>
             <p class="field__error"></p>
           </div>
@@ -119,9 +112,6 @@
             <label for="f-dept">Department *</label>
             <span class="select"><select id="f-dept" name="department" required>
               <option value="" selected disabled hidden>Choose your department</option>
-              <option>Accountancy</option><option>Business Administration</option><option>Information Technology</option>
-              <option>Computer Science</option><option>Education</option><option>Engineering</option><option>Nursing</option>
-              <option>Psychology</option><option>Hospitality Management</option><option>Criminology</option>
             </select></span>
             <p class="field__error"></p>
           </div>
@@ -183,6 +173,17 @@
       ["dragenter", "dragover"].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add("is-over"); }); });
       ["dragleave", "drop"].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove("is-over"); }); });
       zone.addEventListener("drop", function (e) { if (e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]); });
+
+      // College list (js/colleges.js); Department only lists the chosen college's departments
+      ARCH_COLLEGES.names.forEach(function (c) { form.college.add(new Option(c, c)); });
+      function fillDepts() {
+        var keep = form.department.value;
+        form.department.length = 1;
+        ARCH_COLLEGES.departments(form.college.value).forEach(function (d) { form.department.add(new Option(d, d)); });
+        form.department.value = ARCH_COLLEGES.collegeOf(keep) === form.college.value ? keep : "";
+        form.department.dispatchEvent(new Event("change"));
+      }
+      form.college.addEventListener("change", fillDepts);
 
       // Grey placeholder text for selects until a value is chosen
       form.querySelectorAll("select").forEach(function (s) {

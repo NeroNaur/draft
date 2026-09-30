@@ -17,8 +17,7 @@
     { id: "u-gt", name: "Grace Tolentino", email: "grace.tolentino@hau.edu.ph", office: "School of Education", role: "Faculty" },
     { id: "u-to", name: "Prof. Teresa Ocampo", email: "teresa.ocampo@hau.edu.ph", office: "School of Arts and Sciences", role: "Faculty" }
   ];
-  var OFFICES = [URO, "School of Business and Accountancy", "School of Computing", "School of Education", "School of Engineering and Architecture",
-    "School of Nursing and Allied Medical Sciences", "School of Arts and Sciences", "School of Hospitality and Tourism Management", "College of Criminal Justice Education and Forensics"];
+  var OFFICES = [URO].concat(ARCH_COLLEGES.names);
 
   function readState() {
     try { return JSON.parse(sessionStorage.getItem(KEY)) || { added: [], roles: {} }; }
